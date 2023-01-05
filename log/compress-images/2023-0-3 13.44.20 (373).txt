@@ -1,0 +1,8 @@
+File from: [./upload/Muhammad_Haekal_6287788014212_KTP.jpeg]
+
+File to: [./upload/Muhammad_Haekal_6287788014212_KTP.jpeg]
+
+Compression algorithm: [mozjpeg]
+
+Description: Error: Command failed: C:\xampp\htdocs\WAHELPDESK\node_modules\mozjpeg\vendor\cjpeg.exe -quality 60 -outfile ./upload/Muhammad_Haekal_6287788014212_KTP.jpeg ./upload/Muhammad_Haekal_6287788014212_KTP.jpeg
+Empty input file
