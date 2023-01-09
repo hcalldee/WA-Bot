@@ -27,7 +27,7 @@ function setBatal($var)
     if(dbcon()->query($sql)===TRUE){
         return 200;
     }else{
-        return 500;
+        return dbcon()->query($sql);
     }
 }
 

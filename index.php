@@ -165,9 +165,11 @@
                                                         </button>
                                                         <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" style="">
                                                             <button class="dropdown-item text-info detail" data-id="<?=$data['id_daftar']?>" data-toggle="modal" data-target="#modalDetail">Detail</button>
+                                                            <button class="dropdown-item text-info setBookingBaru" data-nama="<?=$data['Nama']?>" data-id="<?=$data['id_daftar']?>"  data-tanggal="<?=$data['tanggal_layanan']?>" data-no="<?=$data['no_wa']?>" data-toggle="modal" data-target="#modalBookingBaru" >Booking Pasien Baru</button>
+                                                            <button class="dropdown-item text-info setBookingLama" data-nama="<?=$data['Nama']?>" data-id="<?=$data['id_daftar']?>"  data-tanggal="<?=$data['tanggal_layanan']?>" data-no="<?=$data['no_wa']?>" data-toggle="modal" data-target="#modalBookingLama" >Booking Pasien Lama</button>
                                                             <button class="dropdown-item text-primary lampiran" data-id="<?=$data['id_daftar']?>" data-toggle="modal" data-target="#modalLampiran">Lampiran</button>
                                                             <button class="dropdown-item text-success setVerifikasi" data-poli="<?=$data['Poli_tujuan']?>" data-jenis="<?=$data['Jenis_Bayar']?>" data-id="<?=$data['id_daftar']?>" data-nama="<?=$data['Nama']?>" data-tanggal="<?=$data['tanggal_layanan']?>"  data-no="<?=$data['no_wa']?>"  data-toggle="modal" data-target="#modalVerifikasi">Verifikasi Pendaftaran</button>
-                                                            <button class="dropdown-item text-warning setTolak" data-poli="<?=$data['Poli_tujuan']?>" data-jenis="<?=$data['Jenis_Bayar']?>" data-id="<?=$data['id_daftar']?>" data-nama="<?=$data['Nama']?>" data-tanggal="<?=$data['tanggal_layanan']?>"  data-no="<?=$data['no_wa']?>" data-toggle="modal" data-target="#modalBatal">Tolak Pendaftaran</button>
+                                                            <button class="dropdown-item text-warning setBatal" data-poli="<?=$data['Poli_tujuan']?>" data-jenis="<?=$data['Jenis_Bayar']?>" data-id="<?=$data['id_daftar']?>" data-nama="<?=$data['Nama']?>" data-tanggal="<?=$data['tanggal_layanan']?>"  data-no="<?=$data['no_wa']?>" data-toggle="modal" data-target="#modalBatal">Tolak Pendaftaran</button>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -398,6 +400,105 @@
             </div>
         </div>
 
+        <div class="modal fade bd-example-modal-sm" id="modalBookingBaru" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                <div class="modal-header ">
+                    <h5 class="modal-title" id="exampleModalLabel">Poli Tujuan Pasien</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Pilih Poli Tujuan Pasien</label>
+                            <select class="form-control" id="poli_tujuan_booking">
+                            </select>
+                    </div>
+                    <div class="form-group" disabled hidden>
+                        <textarea class="form-control" id="alamat_booking" rows="3"></textarea>
+                    </div>
+                    <div class="form-group" disabled hidden>
+                        <input type="text" class="form-control" id="no_booking">
+                    </div>
+                    <div class="form-group" disabled hidden>
+                        <input type="text" class="form-control" id="nama_booking">
+                    </div>
+                    <div class="form-group" disabled hidden>
+                        <input type="text" class="form-control" id="tgl_booking">
+                    </div>
+                    <!-- STTS -->
+                    <!-- TGL_BOOKING TIMESTAMP -->
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btn_booking">Booking</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade bd-example-modal-md" id="modalBookingLama" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content">
+                <div class="modal-header ">
+                    <h5 class="modal-title" id="exampleModalLabel">Booking Pasien Lama</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="exampleFormControlSelect1">Pilih Poli Tujuan Pasien</label>
+                                <select class="form-control" id="poli_booking_registrasi">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="exampleFormControlSelect1">Pilih Dokter</label>
+                                <select class="form-control" id="dokter_booking_registrasi">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="exampleFormControlSelect1">Pilih Jaminan Pasien</label>
+                                <select class="form-control" id="penjamin">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="exampleFormControlSelect1">No Rekam Medis</label>
+                                <input type="text" class="form-control" id="no_rm_lama">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" disabled hidden>
+                        <input type="text" class="form-control" id="no_antrian_lama">
+                    </div>
+                    <div class="form-group" disabled hidden>
+                        <input type="text" class="form-control" id="tgl_booking_lama">
+                    </div>
+                    <!-- STTS -->
+                    <!-- TGL_BOOKING TIMESTAMP -->
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btn_booking_lama">Booking</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
 
         </div>
         <!-- End of Content Wrapper -->
@@ -427,7 +528,25 @@
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
     <script>
-    
+    function TStoD(){
+        let timeStamp= Date.now()
+        let now= new Date(timeStamp);
+        let time = ("0" + now.getHours()).slice(-2) + ":" 
+                + ("0" + now.getMinutes()).slice(-2)+ ":" 
+                + ("0" + now.getSeconds()).slice(-2);
+        return time;
+    }
+    function TStoDT() {
+        let timeStamp = Date.now();
+        let now = new Date(timeStamp);
+        let date =
+            now.getFullYear() +
+            "-" +
+            ("0" + now.getMonth() + 1).slice(-2) +
+            "-" +
+            ("0" + now.getDate()).slice(-2);
+        return date;
+    }
     function clear(params) {
         let next = $(params+' .modal-body').find('.form-group').find('.form-control')
         Object.keys(next).forEach(key => {
@@ -437,7 +556,112 @@
             }
         });
         $(params).modal('toggle')
-    }
+    }   
+
+    
+        $(".setBookingBaru").click(function () {
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8082/getPoli/",
+                dataType: "JSON",
+                success: function (data) {
+                    // // fungsi setbooking
+                    $("#poli_tujuan_booking").html("")
+                    data.forEach(ele => {
+                        $("#poli_tujuan_booking").append(""+
+                        "<option value='"+ele.kd_poli+"'>"+ele.nm_poli+"</option>"
+                        +"")
+                    });
+                }
+            });
+            $.post('conf/api-serv.php',{getDataRow:$(this).attr('data-id')}, function(data){
+                $("#alamat_booking").val(JSON.parse(data)[0].Alamat)
+            });
+            $("#tgl_booking").val($(this).attr('data-tanggal'))
+            $("#nama_booking").val($(this).attr('data-nama'))
+            $("#no_booking").val($(this).attr('data-no'))
+        })
+        
+        $(".setBookingLama").click(function () {
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8082/getPoliDokter/",
+                dataType: "JSON",
+                success: function (data) {
+                    // fungsi setbookinglama
+                    $("#poli_booking_registrasi").html("")
+                    data.poli.forEach(ele => {
+                        $("#poli_booking_registrasi").append(""+
+                        "<option value='"+ele.kd_poli+"'>"+ele.nm_poli+"</option>"
+                        +"")
+                    });
+                    $("#dokter_booking_registrasi").html("")
+                    data.dokter.forEach(ele => {
+                        $("#dokter_booking_registrasi").append(""+
+                        "<option value='"+ele.kd_dokter+"'>"+ele.nm_dokter+"</option>"
+                        +"")
+                    });
+                    $("#penjamin").html("")
+                    data.penjab.forEach(ele => {
+                        $("#penjamin").append(""+
+                        "<option value='"+ele.kd_pj+"'>"+ele.png_jawab+"</option>"
+                        +"")
+                    });
+                }
+            });
+            $("#tgl_booking_lama").val($(this).attr('data-tanggal'))
+        })
+
+        $("#btn_booking_lama").click(function () {
+        let data_kirim = {
+            "tanggal_booking":TStoDT(),
+            "jam_booking":TStoD(),
+            "no_rkm_medis":$("#no_rm_lama").val(),
+            "tanggal_periksa":$("#tgl_booking_lama").val(),
+            "kd_dokter":$("#dokter_booking_registrasi").val(),
+            "kd_poli":$("#poli_booking_registrasi").val(),
+            "kd_pj":$("#penjamin").val(),
+            "waktu_kunjungan":TStoDT()+" "+TStoD()
+
+        }
+        alert("Data Sudah Dikirim")
+        clear('#modalBookingLama')
+
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8082/daftarBaruPasienLama/",
+            data:{
+                send:data_kirim
+            },
+            dataType: "JSON",
+            success: function (data) {
+            }
+        });
+    })
+
+        $("#btn_booking").click(function () {
+            let data_kirim = {
+                "tanggal":$("#tgl_booking").val(),
+                "nama":$("#nama_booking").val(),
+                "alamat":$("#alamat_booking").val(),
+                "no_telp":$("#no_booking").val(),
+                "kd_poli":$("#poli_tujuan_booking").find(":selected").val(),
+                "tanggal_booking":$("#tgl_booking").val()+" "+TStoD()
+            }
+            alert("Data Sudah Dikirim")
+            clear('#modalBooking')
+
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:8082/setBooking/",
+                data:{
+                    send:data_kirim
+                },
+                dataType: "JSON",
+                success: function (data) {
+                }
+            });
+        })
 
         $(".detail").click(function () {
             $.post('conf/api-serv.php',{getDataRow:$(this).attr('data-id')}, function(data){
@@ -458,7 +682,7 @@
                         if(key=="KTP"){
                             active="active";
                         }else{
-                            active="";
+                            active="active";
                         }
                         if(dt[key]!=null){
                             $("#carousel-lampiran").append(""+
@@ -481,11 +705,51 @@
 
         $("#no_rm").keypress(function(event) {
             let keycode = event.keyCode || event.which;
+            let no_rm = $(this).val()
             if($(this).val()!=""){
                 if(keycode == '13') {
-                    console.log($(this).val())
+                    $.ajax({
+                        type: "POST",
+                        url: "http://localhost:8082/getVerifikasi/",
+                        data:{
+                            no_rm:no_rm
+                        },
+                        dataType: "JSON",
+                        success: function (data) {
+                            data = data[0]
+                            $('#poli_tujuan').val(data.nm_poli)
+                            $('#no_antrian').val(data.antrian)
+                            $('#jam_layanan').val(data.jam_layanan)
+                        }
+                    });
+                    console.log($(this).val()+'\n'+$('#tanggal_layanan').val())
                     // request ke server buat nyari data antrian poli jam tunggu, tanggal layanan pasien dari db epasien
-                //     alert('You pressed a "enter" key in somewhere');    
+                    // alert('You pressed a "enter" key in somewhere');    
+                }
+            }
+        });
+        
+        $("#no_rm_lama").keypress(function(event) {
+            let keycode = event.keyCode || event.which;
+            if($(this).val()!=""){
+                if(keycode == '13') {
+                    let rm = $(this).val()
+                    $.ajax({
+                        type: "POST",
+                        url: "http://localhost:8082/getRM/",
+                        data:{
+                            no_rm:rm
+                        },
+                        dataType: "JSON",
+                        success: function (data) {
+                            console.log(data)
+                            if(data=='data tidak terdaftar'){
+                                alert("data pasien belum terdaftar silahkan registrasi sebagai pasien baru")
+                            }else{
+                                alert("pasien dengan nomor rekam medis "+data[0].no_rkm_medis+" terdaftar dengan status sebagai pasien lama")
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -531,23 +795,28 @@
         })
 
         $('#btn_batal').click(function (params) {
-            let no_wa = $(this).attr('data-id')
+            let no_wa = $(this).attr('data-no')
+            let id = $(this).attr('data-no')
             let pesan =
             "Assalamualaikum Wr. Wb. \n"+
-            "Yth. Tn/Ny. \n"+
-            "Mohon Maaf Pendaftaran anda di tanggal "+$('#tanggal_layanan').val()+" Pada Poli :"+$('#poli_tujuan').val()+" di Tolak\n"+
+            "Yth. Tn/Ny. "+$(this).attr('data-nama')+"\n"+
+            "Mohon Maaf Pendaftaran anda di tanggal "+$(this).attr('data-tanggal')+"\n"+
+            "Pada Poli :"+$(this).attr('data-poli')+" di Tolak\n"+
             "Dikarenakan data yang anda kirim salah, tidak lengkap, lampiran tidak sesuai, lampiran kurang lengkap, atau layanan Poli Tutup/Kuota penuh\n"+
-            "Dimohon untuk mengikuti arahan Admin Selanjutnya\n"+
-            "Pesan tambahan :\n"+
-            $('#pesan_batal').val();
-
+            "Dimohon untuk mengikuti arahan Admin Selanjutnya\n";
+            
+            if($('#pesan_batal').val()!=""){
+                pesan+
+                "Pesan tambahan dari Admin:\n"+
+                $('#pesan_batal').val();
+            };
+            
             $.post('conf/api-serv.php',{setBatal:$(this).attr('data-id')}, function(data){
-                let id = $(this).attr('data-id')
                 data = JSON.parse(data)
                 if(data==200){
                     $.ajax({
                         type: "POST",
-                        url: "http://localhost:8081/sendToClient/",
+                        url: "http://localhost:8081/sendToClient",
                         data: {
                             hapus_id:id,
                             no:no_wa,

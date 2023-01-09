@@ -1,22 +1,46 @@
-2023/01/03-19:53:12.388 718 Reusing MANIFEST C:\xampp\htdocs\WAHELPDESK\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
-2023/01/03-19:53:12.389 718 Recovering log #1708
-2023/01/03-19:53:12.680 718 Reusing old log C:\xampp\htdocs\WAHELPDESK\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/001708.log 
-2023/01/03-19:53:25.710 e34 Level-0 table #1718: started
-2023/01/03-19:53:25.844 e34 Level-0 table #1718: 1304420 bytes OK
-2023/01/03-19:53:25.848 e34 Delete type=0 #1708
-2023/01/03-19:53:25.858 e34 Compacting 1@1 + 6@2 files
-2023/01/03-19:53:26.140 e34 Generated table #1719@1: 31163 keys, 2250578 bytes
-2023/01/03-19:53:26.294 e34 Generated table #1720@1: 25277 keys, 2275050 bytes
-2023/01/03-19:53:26.451 e34 Generated table #1721@1: 49437 keys, 2268504 bytes
-2023/01/03-19:53:26.583 e34 Generated table #1722@1: 39320 keys, 2276208 bytes
-2023/01/03-19:53:26.704 e34 Generated table #1723@1: 45705 keys, 2180882 bytes
-2023/01/03-19:53:26.957 e34 Generated table #1724@1: 98071 keys, 2163742 bytes
-2023/01/03-19:53:26.957 e34 Compacted 1@1 + 6@2 files => 13414964 bytes
-2023/01/03-19:53:26.958 e34 compacted to: files[ 0 0 6 0 0 0 0 ]
-2023/01/03-19:53:26.959 e34 Delete type=2 #1710
-2023/01/03-19:53:26.959 e34 Delete type=2 #1711
-2023/01/03-19:53:26.960 e34 Delete type=2 #1712
-2023/01/03-19:53:26.960 e34 Delete type=2 #1713
-2023/01/03-19:53:26.960 e34 Delete type=2 #1714
-2023/01/03-19:53:26.960 e34 Delete type=2 #1715
-2023/01/03-19:53:26.960 e34 Delete type=2 #1718
+2023/01/09-08:13:43.956 23e4 Reusing MANIFEST C:\xampp\htdocs\WA-Bot\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2023/01/09-08:13:44.048 23e4 Recovering log #1843
+2023/01/09-08:13:44.400 23e4 Reusing old log C:\xampp\htdocs\WA-Bot\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/001843.log 
+2023/01/09-08:13:56.144 11c Level-0 table #1854: started
+2023/01/09-08:13:56.470 11c Level-0 table #1854: 1251059 bytes OK
+2023/01/09-08:13:56.561 11c Delete type=0 #1843
+2023/01/09-08:13:57.589 8a4 Compacting 1@1 + 8@2 files
+2023/01/09-08:13:57.919 8a4 Generated table #1855@1: 30839 keys, 2254853 bytes
+2023/01/09-08:13:58.409 8a4 Generated table #1856@1: 25447 keys, 2273100 bytes
+2023/01/09-08:13:58.911 8a4 Generated table #1857@1: 24992 keys, 2278024 bytes
+2023/01/09-08:13:59.476 8a4 Generated table #1858@1: 64659 keys, 2259287 bytes
+2023/01/09-08:13:59.933 8a4 Generated table #1859@1: 43004 keys, 2310599 bytes
+2023/01/09-08:14:00.503 8a4 Generated table #1860@1: 81631 keys, 2228116 bytes
+2023/01/09-08:14:00.889 8a4 Generated table #1861@1: 81836 keys, 1774840 bytes
+2023/01/09-08:14:00.889 8a4 Compacted 1@1 + 8@2 files => 15378819 bytes
+2023/01/09-08:14:00.920 8a4 compacted to: files[ 0 0 7 0 0 0 0 ]
+2023/01/09-08:14:00.921 8a4 Delete type=2 #1841
+2023/01/09-08:14:00.921 8a4 Delete type=2 #1842
+2023/01/09-08:14:00.921 8a4 Delete type=2 #1846
+2023/01/09-08:14:00.921 8a4 Delete type=2 #1847
+2023/01/09-08:14:00.921 8a4 Delete type=2 #1848
+2023/01/09-08:14:00.921 8a4 Delete type=2 #1849
+2023/01/09-08:14:00.922 8a4 Delete type=2 #1850
+2023/01/09-08:14:00.922 8a4 Delete type=2 #1851
+2023/01/09-08:14:00.922 8a4 Delete type=2 #1854
+2023/01/09-09:29:36.605 22f4 Level-0 table #1863: started
+2023/01/09-09:29:36.944 22f4 Level-0 table #1863: 1320427 bytes OK
+2023/01/09-09:29:36.976 22f4 Delete type=0 #1853
+2023/01/09-09:30:31.019 8a4 Compacting 1@1 + 7@2 files
+2023/01/09-09:30:31.410 8a4 Generated table #1864@1: 32920 keys, 2258082 bytes
+2023/01/09-09:30:31.767 8a4 Generated table #1865@1: 25438 keys, 2275091 bytes
+2023/01/09-09:30:32.097 8a4 Generated table #1866@1: 25037 keys, 2278014 bytes
+2023/01/09-09:30:32.391 8a4 Generated table #1867@1: 61554 keys, 2259014 bytes
+2023/01/09-09:30:32.684 8a4 Generated table #1868@1: 44922 keys, 2308293 bytes
+2023/01/09-09:30:32.974 8a4 Generated table #1869@1: 74939 keys, 2223937 bytes
+2023/01/09-09:30:33.266 8a4 Generated table #1870@1: 100826 keys, 2166680 bytes
+2023/01/09-09:30:33.266 8a4 Compacted 1@1 + 7@2 files => 15769111 bytes
+2023/01/09-09:30:33.290 8a4 compacted to: files[ 0 0 7 0 0 0 0 ]
+2023/01/09-09:30:33.290 8a4 Delete type=2 #1855
+2023/01/09-09:30:33.291 8a4 Delete type=2 #1856
+2023/01/09-09:30:33.291 8a4 Delete type=2 #1857
+2023/01/09-09:30:33.291 8a4 Delete type=2 #1858
+2023/01/09-09:30:33.291 8a4 Delete type=2 #1859
+2023/01/09-09:30:33.291 8a4 Delete type=2 #1860
+2023/01/09-09:30:33.291 8a4 Delete type=2 #1861
+2023/01/09-09:30:33.291 8a4 Delete type=2 #1863

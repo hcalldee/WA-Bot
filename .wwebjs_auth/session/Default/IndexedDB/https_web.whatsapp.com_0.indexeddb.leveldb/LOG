@@ -1,23 +1,25 @@
-2023/01/03-19:59:09.465 317c Reusing MANIFEST C:\xampp\htdocs\WAHELPDESK\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
-2023/01/03-19:59:09.467 317c Recovering log #1717
-2023/01/03-19:59:09.895 317c Reusing old log C:\xampp\htdocs\WAHELPDESK\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/001717.log 
-2023/01/03-19:59:45.409 c40 Level-0 table #1727: started
-2023/01/03-19:59:45.482 c40 Level-0 table #1727: 1272161 bytes OK
-2023/01/03-19:59:45.485 c40 Delete type=0 #1717
-2023/01/03-19:59:45.844 2810 Compacting 1@1 + 6@2 files
-2023/01/03-19:59:46.055 2810 Generated table #1728@1: 30530 keys, 2255967 bytes
-2023/01/03-19:59:46.174 2810 Generated table #1729@1: 25369 keys, 2274063 bytes
-2023/01/03-19:59:46.338 2810 Generated table #1730@1: 47802 keys, 2267756 bytes
-2023/01/03-19:59:46.477 2810 Generated table #1731@1: 41722 keys, 2277688 bytes
-2023/01/03-19:59:46.592 2810 Generated table #1732@1: 41551 keys, 2179427 bytes
-2023/01/03-19:59:46.804 2810 Generated table #1733@1: 102507 keys, 2255255 bytes
-2023/01/03-19:59:46.812 2810 Generated table #1734@1: 2662 keys, 62004 bytes
-2023/01/03-19:59:46.812 2810 Compacted 1@1 + 6@2 files => 13572160 bytes
-2023/01/03-19:59:46.814 2810 compacted to: files[ 0 0 7 0 0 0 0 ]
-2023/01/03-19:59:46.814 2810 Delete type=2 #1719
-2023/01/03-19:59:46.814 2810 Delete type=2 #1720
-2023/01/03-19:59:46.814 2810 Delete type=2 #1721
-2023/01/03-19:59:46.814 2810 Delete type=2 #1722
-2023/01/03-19:59:46.814 2810 Delete type=2 #1723
-2023/01/03-19:59:46.814 2810 Delete type=2 #1724
-2023/01/03-19:59:46.814 2810 Delete type=2 #1727
+2023/01/09-09:37:26.120 1cac Reusing MANIFEST C:\xampp\htdocs\WA-Bot\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2023/01/09-09:37:26.120 1cac Recovering log #1862
+2023/01/09-09:37:26.286 1cac Reusing old log C:\xampp\htdocs\WA-Bot\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/001862.log 
+2023/01/09-09:37:40.772 12d0 Level-0 table #1873: started
+2023/01/09-09:37:41.102 12d0 Level-0 table #1873: 1346291 bytes OK
+2023/01/09-09:37:41.124 12d0 Delete type=0 #1862
+2023/01/09-09:37:51.701 29c4 Compacting 1@1 + 7@2 files
+2023/01/09-09:37:52.047 29c4 Generated table #1874@1: 30582 keys, 2256091 bytes
+2023/01/09-09:37:52.322 29c4 Generated table #1875@1: 25346 keys, 2275822 bytes
+2023/01/09-09:37:52.592 29c4 Generated table #1876@1: 25094 keys, 2278525 bytes
+2023/01/09-09:37:52.839 29c4 Generated table #1877@1: 59763 keys, 2259221 bytes
+2023/01/09-09:37:53.460 29c4 Generated table #1878@1: 46767 keys, 2313100 bytes
+2023/01/09-09:37:53.727 29c4 Generated table #1879@1: 69001 keys, 2217972 bytes
+2023/01/09-09:37:54.039 29c4 Generated table #1880@1: 106000 keys, 2259856 bytes
+2023/01/09-09:37:54.100 29c4 Generated table #1881@1: 7388 keys, 162998 bytes
+2023/01/09-09:37:54.100 29c4 Compacted 1@1 + 7@2 files => 16023585 bytes
+2023/01/09-09:37:54.129 29c4 compacted to: files[ 0 0 8 0 0 0 0 ]
+2023/01/09-09:37:54.130 29c4 Delete type=2 #1864
+2023/01/09-09:37:54.130 29c4 Delete type=2 #1865
+2023/01/09-09:37:54.130 29c4 Delete type=2 #1866
+2023/01/09-09:37:54.130 29c4 Delete type=2 #1867
+2023/01/09-09:37:54.130 29c4 Delete type=2 #1868
+2023/01/09-09:37:54.130 29c4 Delete type=2 #1869
+2023/01/09-09:37:54.130 29c4 Delete type=2 #1870
+2023/01/09-09:37:54.130 29c4 Delete type=2 #1873
