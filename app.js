@@ -160,9 +160,10 @@ let form_data_diri=
 "Alamat  : \n"+
 "Jenis Bayar : (BPJS, Umum, Asuransi atau Pihak Ketiga) Pilih Salah Satu tanpa Tanda Kurung\n"+
 "Poli Tujuan : \n"+
-"Nama Penjamin : \n"+
+"Dokter Tujuan : \n"+
+"Nama Penanggung Jawab : \n"+
 "Nama Ibu Kandung : \n"+
-"No Telp Penjamin : ";
+"No Telp Penanggung Jawab : ";
 
 let info_tambahan=
 "Silahkan Lengkapi dokumen lainnya seperti \n"+
@@ -242,7 +243,7 @@ client.on('message', async (message) => {
       console.log(getState(state,message._data.id.remote));
       let media = null
       client.sendMessage(message.from,'Berikut Merupakan cara pengisian Form Pendaftaran Layanana Rawat Jalan Rumah Sakit Pelita Insani');
-      for (let index = 0; index < 2; index++) {
+      for (let index = 0; index < 3; index++) {
         media = MessageMedia.fromFilePath('./assets/dokumentasi/guide/'+(index+1)+'.jpg');
         client.sendMessage(message.from,media);
       }
@@ -302,11 +303,11 @@ client.on('message', async (message) => {
           'NIK':removeSpasi(result[2].split(":")[1]),
           'Alamat':removeSpasi(result[3].split(":")[1]),
           'Jenis_Bayar':removeSpasi(result[4].split(":")[1]),
-          'Poli_tujuan':removeSpasi(result[5].split(":")[1]),
+          'Poli_tujuan':removeSpasi(result[5].split(":")[1])+'_'+removeSpasi(result[6].split(":")[1]),
           'no_wa':message._data.id.remote.split('@')[0],
-          'nama_penjamin':removeSpasi(result[6].split(":")[1]),
-          'nama_ibu':removeSpasi(result[7].split(":")[1]),
-          'no_penjamin':removeSpasi(result[8].split(":")[1]),
+          'nama_penjamin':removeSpasi(result[7].split(":")[1]),
+          'nama_ibu':removeSpasi(result[8].split(":")[1]),
+          'no_penjamin':removeSpasi(result[9].split(":")[1]),
         }
         if(fil.checker(dataDaftar)){
           if(fil.search_data('./assets/','datapendaftaran.json',dataDaftar.id_daftar)=='data not found'){
@@ -328,6 +329,7 @@ client.on('message', async (message) => {
           message.reply("Dimohon untuk terlebih dahulu reply/balas pesan form pendaftaran yang anda kirim, terimakasih.");
         }else{
           let nama = message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1]
+          let nik = message._data.quotedMsg.body.split(/\r?\n/)[2].split(':')[1]
           if(typeof(nama)!='undefined'){
             if(message.hasMedia){
               // console.log(message)
@@ -336,7 +338,7 @@ client.on('message', async (message) => {
               // console.log(nama)
               // nama = nama.replace(/\s/g, '')
               fs.writeFile(
-                "./upload/" +removeSpasi(nama).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuAsuransi.'+mediafile.mimetype.split("/")[1],
+                "./upload/" +removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuAsuransi.'+mediafile.mimetype.split("/")[1],
                 mediafile.data,
                 "base64",
                 function (err) {
@@ -350,9 +352,9 @@ client.on('message', async (message) => {
                         datadir,
                         jsonfilename,
                         id_daftar,
-                        fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'KartuAsuransi','value':removeSpasi(nama).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuAsuransi.'+mediafile.mimetype.split("/")[1]})
+                        fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'KartuAsuransi','value':removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuAsuransi.'+mediafile.mimetype.split("/")[1]})
                     )
-                    com.compress(removeSpasi(nama).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuAsuransi.'+mediafile.mimetype.split("/")[1])
+                    com.compress(removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuAsuransi.'+mediafile.mimetype.split("/")[1])
                     message.reply("Dokumen Kartu Jaminan Kesehatan Tn/Ny."+temp_nama+" Berhasil Disimpan");
                   }
                 }
@@ -373,6 +375,7 @@ client.on('message', async (message) => {
           message.reply("Dimohon untuk terlebih dahulu reply/balas pesan form pendaftaran yang anda kirim, terimakasih.");
         }else{
           let nama = message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1]
+          let nik = message._data.quotedMsg.body.split(/\r?\n/)[2].split(':')[1]
           if(typeof(nama)!='undefined'){
             if(message.hasMedia){
               // console.log(message)
@@ -381,7 +384,7 @@ client.on('message', async (message) => {
               // console.log(nama)
               // nama = nama.replace(/\s/g, '')
               fs.writeFile(
-                "./upload/" +removeSpasi(nama).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KTP.'+mediafile.mimetype.split("/")[1],
+                "./upload/" +removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KTP.'+mediafile.mimetype.split("/")[1],
                 mediafile.data,
                 "base64",
                 function (err) {
@@ -395,9 +398,9 @@ client.on('message', async (message) => {
                           datadir,
                           jsonfilename,
                           id_daftar,
-                          fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'KTP','value':removeSpasi(nama).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KTP.'+mediafile.mimetype.split("/")[1]})
+                          fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'KTP','value':removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KTP.'+mediafile.mimetype.split("/")[1]})
                       )
-                    com.compress(removeSpasi(nama).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KTP.'+mediafile.mimetype.split("/")[1])
+                    com.compress(removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KTP.'+mediafile.mimetype.split("/")[1])
                     message.reply("Dokumen KTP Tn/Ny."+temp_nama+" Berhasil Disimpan");
                   }
                 }
@@ -418,6 +421,7 @@ client.on('message', async (message) => {
           message.reply("Dimohon untuk terlebih dahulu reply/balas pesan form pendaftaran yang anda kirim, terimakasih.");
         }else{
           let nama = message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1]
+          let nik = message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1]
           if(typeof(nama)!='undefined'){
             if(message.hasMedia){
               // console.log(message)
@@ -425,7 +429,7 @@ client.on('message', async (message) => {
               // console.log(nama)
               // nama = nama.replace(/\s/g, '')
               fs.writeFile(
-                "./upload/" +removeSpasi(nama).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuRSPI.'+mediafile.mimetype.split("/")[1],
+                "./upload/" +removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuRSPI.'+mediafile.mimetype.split("/")[1],
                 mediafile.data,
                 "base64",
                 function (err) {
@@ -439,9 +443,9 @@ client.on('message', async (message) => {
                           datadir,
                           jsonfilename,
                           id_daftar,
-                          fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'KartuRSPI','value':removeSpasi(nama).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuRSPI.'+mediafile.mimetype.split("/")[1]})
+                          fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'KartuRSPI','value':removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuRSPI.'+mediafile.mimetype.split("/")[1]})
                       )
-                      com.compress(removeSpasi(nama).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuRSPI.'+mediafile.mimetype.split("/")[1])
+                      com.compress(removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuRSPI.'+mediafile.mimetype.split("/")[1])
                     message.reply("Dokumen Kartu Identitas Berobat Tn/Ny."+temp_nama+" Berhasil Disimpan");
                   }
                 }
@@ -462,6 +466,7 @@ client.on('message', async (message) => {
           message.reply("Dimohon untuk terlebih dahulu reply/balas pesan form pendaftaran yang anda kirim, terimakasih.");
         }else{
           let nama = message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1]
+          let nik = message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1]
           if(typeof(nama)!='undefined'){
             if(message.hasMedia){
               // console.log(message)
@@ -469,7 +474,7 @@ client.on('message', async (message) => {
               // console.log(nama)
               // nama = nama.replace(/\s/g, '')
               fs.writeFile(
-                "./upload/" +removeSpasi(nama).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'GL.'+mediafile.mimetype.split("/")[1],
+                "./upload/" +removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'GL.'+mediafile.mimetype.split("/")[1],
                 mediafile.data,
                 "base64",
                 function (err) {
@@ -483,9 +488,9 @@ client.on('message', async (message) => {
                           datadir,
                           jsonfilename,
                           id_daftar,
-                          fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'GL','value':removeSpasi(nama).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'GL.'+mediafile.mimetype.split("/")[1]})
+                          fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'GL','value':removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'GL.'+mediafile.mimetype.split("/")[1]})
                       )
-                      com.compress(removeSpasi(nama).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'GL.'+mediafile.mimetype.split("/")[1])
+                      com.compress(removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'GL.'+mediafile.mimetype.split("/")[1])
                     message.reply("Dokumen Guarantee Letter Tn/Ny."+temp_nama+" Berhasil Disimpan");
                   }
                 }
@@ -506,6 +511,7 @@ client.on('message', async (message) => {
           message.reply("Dimohon untuk terlebih dahulu reply/balas pesan form pendaftaran yang anda kirim, terimakasih.");
         }else{
           let nama = message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1]
+          let nik = message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1]
           if(typeof(nama)!='undefined'){
             if(message.hasMedia){
               // console.log(message)
@@ -513,7 +519,7 @@ client.on('message', async (message) => {
               // console.log(nama)
               // nama = nama.replace(/\s/g, '')
               fs.writeFile(
-                "./upload/" +removeSpasi(nama).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SR.'+mediafile.mimetype.split("/")[1],
+                "./upload/" +removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SR.'+mediafile.mimetype.split("/")[1],
                 mediafile.data,
                 "base64",
                 function (err) {
@@ -527,9 +533,9 @@ client.on('message', async (message) => {
                           datadir,
                           jsonfilename,
                           id_daftar,
-                          fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'SR','value':removeSpasi(nama).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SR.'+mediafile.mimetype.split("/")[1]})
+                          fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'SR','value':removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SR.'+mediafile.mimetype.split("/")[1]})
                       )
-                      com.compress(removeSpasi(nama).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SR.'+mediafile.mimetype.split("/")[1])
+                      com.compress(removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SR.'+mediafile.mimetype.split("/")[1])
                     message.reply("Dokumen Surat Rujukan Tn/Ny."+temp_nama+" Berhasil Disimpan");
                   }
                 }
@@ -550,6 +556,7 @@ client.on('message', async (message) => {
           message.reply("Dimohon untuk terlebih dahulu reply/balas pesan form pendaftaran yang anda kirim, terimakasih.");
         }else{
           let nama = message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1]
+          let nik = message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1]
           if(typeof(nama)!='undefined'){
             if(message.hasMedia){
               // console.log(message)
@@ -557,7 +564,7 @@ client.on('message', async (message) => {
               // console.log(nama)
               // nama = nama.replace(/\s/g, '')
               fs.writeFile(
-                "./upload/" +removeSpasi(nama).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SK.'+mediafile.mimetype.split("/")[1],
+                "./upload/" +removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SK.'+mediafile.mimetype.split("/")[1],
                 mediafile.data,
                 "base64",
                 function (err) {
@@ -571,9 +578,9 @@ client.on('message', async (message) => {
                           datadir,
                           jsonfilename,
                           id_daftar,
-                          fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'SK','value':removeSpasi(nama).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SK.'+mediafile.mimetype.split("/")[1]})
+                          fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'SK','value':removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SK.'+mediafile.mimetype.split("/")[1]})
                       )
-                    com.compress(removeSpasi(nama).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SK.'+mediafile.mimetype.split("/")[1])
+                    com.compress(removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SK.'+mediafile.mimetype.split("/")[1])
                     message.reply("Dokumen Surat Kontrol Tn/Ny."+temp_nama+" Berhasil Disimpan");
                   }
                 }

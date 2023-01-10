@@ -5,9 +5,15 @@ function getData($var)
     return sqlFetch(dbcon()->query($sql));
 }
 
+function getDataByTgl($var)
+{
+    $sql = "select * from daftar_pasien where date(insert_at) = ".'"'.$var.'"';
+    return sqlFetch(dbcon()->query($sql));
+}
+
 function getLampiran($var)
 {
-    $sql = "select KartuAsuransi, KTP, KartuRSPI from daftar_pasien where id_daftar = ".'"'.$var.'"';
+    $sql = "select KartuAsuransi, KTP, KartuRSPI, GL,SK,SR from daftar_pasien where id_daftar = ".'"'.$var.'"';
     return sqlFetch(dbcon()->query($sql));
 }
 

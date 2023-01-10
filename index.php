@@ -74,7 +74,7 @@
                     </button>
 
                     <!-- Topbar Search -->
-                    <form
+                    <!-- <form
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
                             <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
@@ -85,7 +85,7 @@
                                 </button>
                             </div>
                         </div>
-                    </form>
+                    </form> -->
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -132,7 +132,14 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Data Pendaftaran</h6>
+                            <div class="d-flex">
+                                <div class="mr-auto p-2"><h6 class="font-weight-bold text-primary justify-content-start">Data Pendaftaran</h6></div>
+                                <div class="p-2">
+                                    <input type="date" class="form-control" id="filter_tgl" placeholder="cari tanggal layanan">
+                                </div>
+                            </div>
+                                <!-- <h6 class="m-0 font-weight-bold text-primary justify-content-start">Data Pendaftaran</h6>
+                                <h6 class="m-0 font-weight-bold text-primary justify-content-end">Data Pendaftaran</h6> -->
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -143,6 +150,7 @@
                                             <th>Nama</th>
                                             <th>Jenis Bayar</th>
                                             <th>Poli Tujuan</th>
+                                            <th>Dokter Tujuan</th>
                                             <th>Jam Daftar</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -156,7 +164,8 @@
                                                 <td><?=$i++?></td>
                                                 <td><?=$data['Nama']?></td>
                                                 <td><?=$data['Jenis_Bayar']?></td>
-                                                <td><?=$data['Poli_tujuan']?></td>
+                                                <td><?=explode('_',$data['Poli_tujuan'])[0]?></td>
+                                                <td><?=explode('_',$data['Poli_tujuan'])[1]?></td>
                                                 <td><?=$data['waktu']?></td>
                                                 <td>
                                                     <div class="dropdown mb-4">
@@ -204,7 +213,7 @@
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal Detail</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Detail Data Pasien</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -212,30 +221,56 @@
                 <div class="modal-body">
                 <form>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="exampleFormControlInput1">Nama</label>
                                 <input type="email" class="form-control" disabled id="nama_pasien">
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="exampleFormControlInput1">NIK</label>
                                 <input type="email" class="form-control" disabled id="NIK_pasien">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">Poli Tujuan</label>
+                                <input type="email" class="form-control" disabled id="Poli_tujuan_pasien">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">Dokter Tujuan</label>
+                                <input type="text" class="form-control" disabled id="Dokter_tujuan_pasien">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">Jenis Bayar</label>
+                                <input type="text" class="form-control" disabled id="Jenis_bayar_pasien">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">Ibu Kandung</label>
+                                <input type="text" class="form-control" disabled id="nm_ibuk">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="exampleFormControlInput1">Jenis Bayar</label>
-                                <input type="email" class="form-control" disabled id="Jenis_bayar_pasien">
+                                <label for="exampleFormControlInput1">Penanggung Jawab</label>
+                                <input type="text" class="form-control" disabled id="nm_pj">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="exampleFormControlInput1">Poli Tujuan</label>
-                                <input type="email" class="form-control" disabled id="Poli_tujuan_pasien">
+                                <label for="exampleFormControlInput1">No.Telp Penanggung Jawab</label>
+                                <input type="text" class="form-control" disabled id="no_pj">
                             </div>
                         </div>
                     </div>
@@ -556,13 +591,66 @@
             }
         });
         $(params).modal('toggle')
-    }   
+    }
+    function buttonPreserve(data) {
+        let tgl_layanan = new Date(data.insert_at.split(' ')[0]);
+        tgl_layanan.setDate(tgl_layanan.getDate() + 1);
+        let tgl = 
+            tgl_layanan.getFullYear() +
+            "-" +
+            ("0" + tgl_layanan.getMonth() + 1).slice(-2) +
+            "-" +
+            ("0" + tgl_layanan.getDate()).slice(-2);
+
+        let btn = ""+
+        "<div class='dropdown mb-4'>"+
+        "<button class='btn btn-primary dropdown-toggle' type='button' id='dropdownMenuButton' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"+
+            "Aksi"+
+        "</button>"+
+        "<div class='dropdown-menu animated--fade-in' aria-labelledby='dropdownMenuButton'>"+
+            "<button class='dropdown-item text-info detail' data-id='"+data.id_daftar+"' data-toggle='modal' data-target='#modalDetail'>Detail</button>"+
+            "<button class='dropdown-item text-info setBookingBaru' data-nama='"+data.Nama+"' data-id='"+data.id_daftar+"'  data-tanggal='"+tgl+"' data-no='"+data.no_wa+"' data-toggle='modal' data-target='#modalBookingBaru' >Booking Pasien Baru</button>"+
+            "<button class='dropdown-item text-info setBookingLama' data-nama='"+data.Nama+"' data-id='"+data.id_daftar+"'  data-tanggal='"+tgl+"' data-no='"+data.no_wa+"' data-toggle='modal' data-target='#modalBookingLama' >Booking Pasien Lama</button>"+
+            "<button class='dropdown-item text-primary lampiran' data-id='"+data.id_daftar+"' data-toggle='modal' data-target='#modalLampiran'>Lampiran</button>"+
+            "<button class='dropdown-item text-success setVerifikasi' data-poli='"+data.Poli_tujuan+"' data-jenis='"+data.Jenis_Bayar+"' data-id='"+data.id_daftar+"' data-nama='"+data.Nama+"' data-tanggal='"+tgl+"'  data-no='"+data.no_wa+"'  data-toggle='modal' data-target='#modalVerifikasi'>Verifikasi Pendaftaran</button>"+
+            "<button class='dropdown-item text-warning setBatal' data-poli='"+data.Poli_tujuan+"' data-jenis='"+data.Jenis_Bayar+"' data-id='"+data.id_daftar+"' data-nama='"+data.Nama+"' data-tanggal='"+tgl+"'  data-no='"+data.no_wa+"' data-toggle='modal' data-target='#modalBatal'>Tolak Pendaftaran</button>"+
+        "</div>"+
+        "</div>";
+        return btn
+    }
+    
+    $("#filter_tgl").change(function () {
+        $.post('conf/api-serv.php',{getDataTanggal:$(this).val()}, function(data){
+            data = JSON.parse(data)
+            let counter = 1;
+            if(data.length>0){
+                let myTable = $('#dataTable').DataTable()
+                myTable.clear().draw()
+                data.forEach(ele => {
+                    console.log(buttonPreserve(ele))
+                    myTable.row.add([
+                        counter, 
+                        ele.Nama, 
+                        ele.Jenis_Bayar, 
+                        ele.Poli_tujuan.split('_')[0], 
+                        ele.Poli_tujuan.split('_')[1], 
+                        ele.insert_at.split(' ')[1],
+                        buttonPreserve(ele)
+                    ]).draw();
+                    counter++;
+                });
+                // console.log(data)
+            }else{
+                // console.log("tidak ada data")
+            }
+        });
+    })
 
     
-        $(".setBookingBaru").click(function () {
+    $("#dataTable").on('click','.setBookingBaru',function () {
             $.ajax({
                 type: "GET",
-                url: "http://localhost:8082/getPoli/",
+                url: "http://192.168.1.200:8082/getPoli/",
                 dataType: "JSON",
                 success: function (data) {
                     // // fungsi setbooking
@@ -582,10 +670,10 @@
             $("#no_booking").val($(this).attr('data-no'))
         })
         
-        $(".setBookingLama").click(function () {
+        $("#dataTable").on('click','.setBookingLama',function () {
             $.ajax({
                 type: "GET",
-                url: "http://localhost:8082/getPoliDokter/",
+                url: "http://192.168.1.200:8082/getPoliDokter/",
                 dataType: "JSON",
                 success: function (data) {
                     // fungsi setbookinglama
@@ -629,7 +717,7 @@
 
         $.ajax({
             type: "POST",
-            url: "http://localhost:8082/daftarBaruPasienLama/",
+            url: "http://192.168.1.200:8082/daftarBaruPasienLama/",
             data:{
                 send:data_kirim
             },
@@ -653,7 +741,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "http://localhost:8082/setBooking/",
+                url: "http://192.168.1.200:8082/setBooking/",
                 data:{
                     send:data_kirim
                 },
@@ -663,19 +751,26 @@
             });
         })
 
-        $(".detail").click(function () {
+        $("#dataTable").on('click','.detail',function () {
             $.post('conf/api-serv.php',{getDataRow:$(this).attr('data-id')}, function(data){
                     dt = JSON.parse(data)[0]
                     $("#nama_pasien").val(dt.Nama)
                     $("#NIK_pasien").val(dt.NIK)
                     $("#Jenis_bayar_pasien").val(dt.Jenis_Bayar)
-                    $("#Poli_tujuan_pasien").val(dt.Poli_tujuan)
+                    $("#Poli_tujuan_pasien").val(dt.Poli_tujuan.split("_")[0])
+                    $("#Dokter_tujuan_pasien").val(dt.Poli_tujuan.split("_")[1])
                     $("#alamat_pasien").val(dt.Alamat)
+                    $("#alamat_pasien").val(dt.Alamat)
+                    $("#nm_pj").val(dt.nama_penjamin)
+                    $("#nm_ibuk").val(dt.nama_ibu)
+                    $("#no_pj").val(dt.no_penjamin)
                 });
             })
-        $(".lampiran").click(function () {
+        
+        $("#dataTable").on('click','.lampiran',function () {
             $.post('conf/api-serv.php',{getLampiran:$(this).attr('data-id')}, function(data){
                     dt = JSON.parse(data)
+                    console.log(dt)
                     let active;
                     $("#carousel-lampiran").html("")
                     Object.keys(dt).forEach(key => {
@@ -684,7 +779,7 @@
                         }else{
                             active="active";
                         }
-                        if(dt[key]!=null){
+                        if(dt[key]!=""){
                             $("#carousel-lampiran").append(""+
                             "<div class='carousel-item "+active+"'>"+
                             "<img class='w-100' style='height:500px' src='./upload/"+dt[key]+"' alt='First "+key+"'>"+
@@ -694,7 +789,7 @@
                 });
             })
         
-        $(".setVerifikasi").click(function () {
+        $("#dataTable").on('click','.setVerifikasi',function () {
             $('#Nama_pendaftar').val($(this).attr('data-nama'))
             $('#tanggal_layanan').val($(this).attr('data-tanggal'))
             $('#poli_tujuan').val($(this).attr('data-poli'))
@@ -710,7 +805,7 @@
                 if(keycode == '13') {
                     $.ajax({
                         type: "POST",
-                        url: "http://localhost:8082/getVerifikasi/",
+                        url: "http://192.168.1.200:8082/getVerifikasi/",
                         data:{
                             no_rm:no_rm
                         },
@@ -736,7 +831,7 @@
                     let rm = $(this).val()
                     $.ajax({
                         type: "POST",
-                        url: "http://localhost:8082/getRM/",
+                        url: "http://192.168.1.200:8082/getRM/",
                         data:{
                             no_rm:rm
                         },
@@ -771,7 +866,7 @@
                 if(data==200){
                     $.ajax({
                         type: "POST",
-                        url: "http://localhost:8081/sendToClient/",
+                        url: "http://192.168.1.200:8081/sendToClient/",
                         data: {
                             no:no_wa,
                             message:pesan
@@ -786,7 +881,7 @@
             });
         })
         
-        $(".setBatal").click(function () {
+        $("#dataTable").on('click','.setBatal',function () {
             $('#btn_batal').attr('data-poli',$(this).attr('data-poli'))
             $('#btn_batal').attr('data-nama',$(this).attr('data-nama'))
             $('#btn_batal').attr('data-tanggal',$(this).attr('data-tanggal'))
@@ -816,7 +911,7 @@
                 if(data==200){
                     $.ajax({
                         type: "POST",
-                        url: "http://localhost:8081/sendToClient",
+                        url: "http://192.168.1.200:8081/sendToClient",
                         data: {
                             hapus_id:id,
                             no:no_wa,

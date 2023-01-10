@@ -1,6 +1,3 @@
-2023/01/09-09:37:25.332 1cac Reusing MANIFEST C:\xampp\htdocs\WA-Bot\.wwebjs_auth\session\Default\Local Storage\leveldb/MANIFEST-000001
-2023/01/09-09:37:25.333 1cac Recovering log #65
-2023/01/09-09:37:25.333 1cac Reusing old log C:\xampp\htdocs\WA-Bot\.wwebjs_auth\session\Default\Local Storage\leveldb/000065.log 
-2023/01/09-09:39:25.848 29c4 Level-0 table #69: started
-2023/01/09-09:39:25.883 29c4 Level-0 table #69: 21618 bytes OK
-2023/01/09-09:39:25.909 29c4 Delete type=0 #65
+2023/01/10-15:06:28.418 2678 Reusing MANIFEST C:\xampp\htdocs\WA-Bot\.wwebjs_auth\session\Default\Local Storage\leveldb/MANIFEST-000001
+2023/01/10-15:06:28.419 2678 Recovering log #3
+2023/01/10-15:06:28.419 2678 Reusing old log C:\xampp\htdocs\WA-Bot\.wwebjs_auth\session\Default\Local Storage\leveldb/000003.log 

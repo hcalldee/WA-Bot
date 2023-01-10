@@ -19,5 +19,8 @@ if(isset($_POST['getDataRow'])){
 } else if(isset($_POST['setBatal'])){
     $keyword  = trim(isset($_POST['setBatal']))?trim($_POST['setBatal']):NULL;
     echo json_encode(setBatal($keyword));
+} else if(isset($_POST['getDataTanggal'])){
+    $keyword  = trim(isset($_POST['getDataTanggal']))?trim($_POST['getDataTanggal']):NULL;
+    echo json_encode(getDataByTgl($keyword));
 }
 ?>
