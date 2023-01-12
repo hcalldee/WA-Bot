@@ -772,18 +772,20 @@
                     dt = JSON.parse(data)
                     console.log(dt)
                     let active;
+                    let i=0
                     $("#carousel-lampiran").html("")
                     Object.keys(dt).forEach(key => {
-                        if(key=="KTP"){
+                        if(i==0){
                             active="active";
                         }else{
-                            active="active";
+                            active="";
                         }
                         if(dt[key]!=""){
                             $("#carousel-lampiran").append(""+
                             "<div class='carousel-item "+active+"'>"+
                             "<img class='w-100' style='height:500px' src='./upload/"+dt[key]+"' alt='First "+key+"'>"+
                                 "</div>")
+                            i++
                         }
                     });
                 });
@@ -864,6 +866,8 @@
             $.post('conf/api-serv.php',{setVerifikasi:$(this).attr('data-id')}, function(data){
                 data = JSON.parse(data)
                 if(data==200){
+                    alert("Data Sudah Dikirim")
+                    clear('#modalVerifikasi')
                     $.ajax({
                         type: "POST",
                         url: "http://192.168.1.200:8081/sendToClient/",
@@ -874,7 +878,6 @@
                         dataType: "JSON",
                         success: function name(data) {
                             // // fungsi clear
-                            clear('#modalVerifikasi')
                         }
                     });
                 }
@@ -891,7 +894,7 @@
 
         $('#btn_batal').click(function (params) {
             let no_wa = $(this).attr('data-no')
-            let id = $(this).attr('data-no')
+            let id = $(this).attr('data-id')
             let pesan =
             "Assalamualaikum Wr. Wb. \n"+
             "Yth. Tn/Ny. "+$(this).attr('data-nama')+"\n"+
@@ -901,7 +904,7 @@
             "Dimohon untuk mengikuti arahan Admin Selanjutnya\n";
             
             if($('#pesan_batal').val()!=""){
-                pesan+
+                pesan = pesan+
                 "Pesan tambahan dari Admin:\n"+
                 $('#pesan_batal').val();
             };
@@ -909,6 +912,8 @@
             $.post('conf/api-serv.php',{setBatal:$(this).attr('data-id')}, function(data){
                 data = JSON.parse(data)
                 if(data==200){
+                    alert("Data Sudah Dikirim")
+                    clear('#modalBatal')
                     $.ajax({
                         type: "POST",
                         url: "http://192.168.1.200:8081/sendToClient",
@@ -919,7 +924,6 @@
                         },
                         dataType: "JSON",
                         success: function name(data) {
-                            clear('#modalBatal')
                             // // console.log("data dikirim ke client")
                         }
                     });

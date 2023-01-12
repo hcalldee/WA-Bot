@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 09, 2023 at 08:17 AM
+-- Generation Time: Jan 12, 2023 at 08:52 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.0.25
 
@@ -69,7 +69,11 @@ INSERT INTO `batal_daftar` (`id_daftar`, `no_rm`, `Nama`, `NIK`, `Alamat`, `Jeni
 ('62877880142126302062809990005202319', '', 'Muhammad Haekal', '6302062809990005', 'Jl. Jeruk', 'Umum', 'Poli Jantung', '6287788014212', 'Jauhari ', 'maslina', '087796352440', '', 'Muhammad_Haekal_6287788014212_KTP.jpeg', '', '', '', '', '2023-01-08 15:17:50', 1),
 ('62877880142126302062809990005202319', '', 'Muhammad Haekal', '6302062809990005', 'Jl. Jeruk', 'Umum', 'Poli Jantung', '6287788014212', 'Jauhari ', 'maslina', '087796352440', '', 'Muhammad_Haekal_6287788014212_KTP.jpeg', '', '', '', '', '2023-01-08 15:21:25', 1),
 ('62877880142126302062809990005202319', '', 'Muhammad Haekal', '6302062809990005', 'Jl. Jeruk', 'Umum', 'Poli Jantung', '6287788014212', 'Jauhari ', 'maslina', '087796352440', '', 'Muhammad_Haekal_6287788014212_KTP.jpeg', '', '', '', '', '2023-01-08 15:22:35', 1),
-('628778801421263020628099900052023110', '', 'Muhammad Haekal', '6302062809990005', 'Jl Jeruk', 'BPJS', 'Poli Mata', '6287788014212', 'Hafiz', 'Paulinawaty', '08125116589', 'Muhammad_Haekal_6287788014212_KartuAsuransi.jpeg', 'Muhammad_Haekal_6287788014212_KTP.jpeg', '', '', 'Muhammad_Haekal_6287788014212_SK.jpeg', 'Muhammad_Haekal_6287788014212_SR.jpeg', '2023-01-09 01:50:05', 1);
+('628778801421263020628099900052023110', '', 'Muhammad Haekal', '6302062809990005', 'Jl Jeruk', 'BPJS', 'Poli Mata', '6287788014212', 'Hafiz', 'Paulinawaty', '08125116589', 'Muhammad_Haekal_6287788014212_KartuAsuransi.jpeg', 'Muhammad_Haekal_6287788014212_KTP.jpeg', '', '', 'Muhammad_Haekal_6287788014212_SK.jpeg', 'Muhammad_Haekal_6287788014212_SR.jpeg', '2023-01-09 01:50:05', 1),
+('628135196244963721234567890002023113', '', 'Fernandy Dito', '6372123456789000', 'Banjarbaru', 'BPJS', 'Poli Penyakit Dalam_dr. Gabril', '6281351962449', 'Ali Iwansyah', 'Nora', '085312345678', '', '6372123456789000_6281351962449_KTP.jpeg', '', '', '', '', '2023-01-12 05:45:52', 1),
+('628778801421263020628099900052023111', '', 'Muhammad Haekal', '6302062809990005', 'Jl Jeruk', 'BPJS', 'Poli Mata_dr. Diana', '6287788014212', 'Hafiz', 'Paulinawaty', '08125116589', '', '6302062809990005_6287788014212_KTP.jpeg', '', '', '', '', '2023-01-12 05:52:07', 1),
+('62877880142126302062809990005202316', '', 'Muhammad Haekal', '6302062809990005', 'Jl. Jeruk', 'Umum', 'Poli Jantung', '6287788014212', 'Jauhari ', 'maslina', '087796352440', '', 'Muhammad_Haekal_6287788014212_KTP.jpeg', '', '', '', '', '2023-01-12 05:53:00', 1),
+('628135196244963721234567890002023113', '', 'Fernandy Dito', '6372123456789000', 'Banjarbaru', 'BPJS', 'Poli Penyakit Dalam_dr. Gabril', '6281351962449', 'Ali Iwansyah', 'Nora', '085312345678', '', '6372123456789000_6281351962449_KTP.jpeg', '', '', '', '', '2023-01-12 05:57:23', 1);
 
 -- --------------------------------------------------------
 
@@ -106,8 +110,8 @@ CREATE TABLE `daftar_pasien` (
 INSERT INTO `daftar_pasien` (`id_daftar`, `no_rm`, `Nama`, `NIK`, `Alamat`, `Jenis_Bayar`, `Poli_tujuan`, `no_wa`, `nama_penjamin`, `nama_ibu`, `no_penjamin`, `KartuAsuransi`, `KTP`, `KartuRSPI`, `GL`, `SK`, `SR`, `insert_at`, `is_verified`) VALUES
 ('002', NULL, 'asd', 'asd', 'asd', 'asd', 'asd', '6287788014212', '', '', '', 'asd', 'asd', 'asd', 'asd', 'asd', 'asd', '2023-01-02 02:33:01', 0),
 ('62812505628686302000000000014202314', NULL, 'Tri', '6302000000000014', 'kotabaru', 'BPJS', 'umum', '6281250562868', 'enda', 'mama', '081250000068', '', 'Tri_6281250562868_KTP.jpeg', '', '', '', '', '2023-01-03 13:02:14', 2),
-('628778801421263020628099900052023111', NULL, 'Muhammad Haekal', '6302062809990005', 'Jl. Jeruk', 'Umum', 'Poli Jantung', '6287788014212', 'Jauhari ', 'maslina', '087796352440', '', 'Muhammad_Haekal_6287788014212_KTP.jpeg', '', '', '', '', '2023-01-09 01:36:50', 2),
-('62877880142126302062809990005202316', NULL, 'Muhammad Haekal', '6302062809990005', 'Jl. Jeruk', 'Umum', 'Poli Jantung', '6287788014212', 'Jauhari ', 'maslina', '087796352440', '', 'Muhammad_Haekal_6287788014212_KTP.jpeg', '', '', '', '', '2023-01-05 01:47:13', 0),
+('628125353489163721234567890012023112', NULL, 'Ali Iwansyah', '6372123456789001', 'jl. Scumvul no.99', 'BPJS', 'Poli Penyakit Dalam_dr. Gabril', '6281253534891', 'fernandy dito', 'luna maya', '085312345678', '6372123456789001_6281253534891_KartuAsuransi.jpeg', '6372123456789001_6281253534891_KTP.jpeg', '', '', 'Ali_Iwansyah_6281253534891_SK.jpeg', 'Ali_Iwansyah_6281253534891_SR.jpeg', '2023-01-11 07:08:42', 2),
+('628135196244963721234567890002023112', NULL, 'Fernandy Dito', '6372123456789000', 'Banjarbaru', 'BPJS', 'Poli Penyakit Dalam_dr. Gabril', '6281351962449', 'Ali Iwansyah', 'Nora', '085312345678', '6372123456789000_6281351962449_KartuAsuransi.jpeg', '6372123456789000_6281351962449_KTP.jpeg', '', '', 'Fernandy_Dito_6281351962449_SK.jpeg', 'Fernandy_Dito_6281351962449_SR.jpeg', '2023-01-11 05:55:33', 2),
 ('62877880142126302062809990005202317', NULL, 'Muhammad Haekal', '6302062809990005', 'Jl. Jeruk', 'Umum', 'Poli Jantung', '6287788014212', 'Jauhari ', 'maslina', '087796352440', '', 'Muhammad_Haekal_6287788014212_KTP.jpeg', '', '', '', '', '2023-01-06 06:41:52', 0);
 
 --

@@ -1,4 +1,5 @@
 const qrcode = require('qrcode-terminal');
+// const { Client, MessageMedia } = require('whatsapp-web.js');
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const fs = require('fs');
 const fil = require('./filing.js');
@@ -15,11 +16,35 @@ const port = 8081;
 app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
 
+const client = new Client({
+  authStrategy: new LocalAuth()
+});
+// const client = new Client();
+
+client.initialize();
+
 function getDateToday() {
   let currentDate = new Date()
   let besk = new Date()
   besk.setDate(currentDate.getDate()+1)
   return besk.getFullYear()+''+(besk.getMonth() + 1)+''+besk.getDate()
+}
+
+function getJamLayanan() {
+  const jam_buka = "08:00:00";
+  const jam_tutup = "15:00:00";
+  const regExp = /(\d{1,2})\:(\d{1,2})\:(\d{1,2})/;
+  let timeStamp= Date.now()
+  let now= new Date(timeStamp);
+  let time = ("0" + now.getHours()).slice(-2) + ":" 
+          + ("0" + now.getMinutes()).slice(-2)+ ":"
+          + ("0" + now.getSeconds()).slice(-2);
+    if((parseInt(time.replace(regExp, "$1$2$3")) >= parseInt(jam_buka.replace(regExp, "$1$2$3")))
+    &&(parseInt(time.replace(regExp, "$1$2$3")) <= parseInt(jam_tutup.replace(regExp, "$1$2$3")))){
+      return true
+    }else{
+      return false
+    }
 }
 //momment
 //0. idle
@@ -50,12 +75,6 @@ function removeSpasi(string) {
   });
   return inf.join("")
 }
-
-const client = new Client({
-  authStrategy: new LocalAuth()
-});
-
-client.initialize();
 
 client.on('qr', (qr) => {
   qrcode.generate(qr, { small: true });
@@ -137,7 +156,20 @@ let string_menu=
 "Assalamualaikum Wr. Wb, Selamat datang di Help Desk Rumah Sakit Pelita Insani\n"+
 "Silahkan pilih menu dengan mengirimkan angka pada menu yang tersedia\n"+
 "1. Informasi Pengisian Form Pendaftaran Rawat Jalan\n"+
-"2. Daftar Rawat Jalan";
+"2. Daftar Rawat Jalan\n"+
+"3. List Kata Kunci WA Robot";
+
+let list_kata_kunci=
+"List Kata Kunci Upload :\n"+
+"1. \"Upload KTP\" untuk upload dokumen KTP \n"+
+"2. \"Upload Kartu Jaminan Kesehatan\" untuk upload dokumen Kartu Jaminan Kesehatan \n"+
+"3. \"Upload Kartu Berobat\" untuk upload dokumen Kartu Identitas Berobat Rumah Sakit Pelita Insani\n"+
+"4. \"Upload GL\" untuk upload dokumen Guaranteee Letter\n"+
+"5. \"Upload Surat Kontrol\" untuk upload dokumen Surat Kontrol\n"+
+"6. \"Upload Surat Rujukan\" untuk upload dokumen Surat Rujukan\n"+
+"7. \"Halo\" untuk aktivasi layanana Robot WA\n"+
+"8. \"Batal\" untuk pembatalan registrasi sebelum proses registrasi diselesaikan\n"+
+"9. \"Selesai Isi\" untuk Menyelesaikan Proses Regsitrasi Rawat Jalan\n";
 
 function TStoT(unix_timestamp=null){
   if(unix_timestamp){
@@ -228,14 +260,21 @@ client.on('message', async (message) => {
     
     //menu registrasi form
     if(message.body === '2'&&typeof(getState(state,message._data.id.remote))!='undefined'){
-      state = changeState(state,message._data.id.remote,2)
-      console.log(getState(state,message._data.id.remote));
-      client.sendMessage(message.from,"Silahkan Lengkapi Data Diri Anda & Dokumen-Dokumen yang diperlukan \n");
-      client.sendMessage(message.from,"Dimohon Untuk Mengisi Form pendaftaran sesuai format dengan menyalin form isian dibawah ini \n");
-      client.sendMessage(message.from,form_data_diri);
-      client.sendMessage(message.from,info_tambahan);
-      client.sendMessage(message.from,info_tambahan2);
-      client.sendMessage(message.from,info_tambahan3);
+      if(getJamLayanan()){
+        state = changeState(state,message._data.id.remote,2)
+        // console.log(getState(state,message._data.id.remote));
+        client.sendMessage(message.from,"Silahkan Lengkapi Data Diri Anda & Dokumen-Dokumen yang diperlukan \n");
+        client.sendMessage(message.from,"Dimohon Untuk Mengisi Form pendaftaran sesuai format dengan menyalin form isian dibawah ini \n");
+        client.sendMessage(message.from,form_data_diri);
+        client.sendMessage(message.from,info_tambahan);
+        client.sendMessage(message.from,info_tambahan2);
+        client.sendMessage(message.from,info_tambahan3);
+      }else{
+        client.sendMessage(message.from,
+        "Mohon Maaf Pendaftaran Layanan Rawat Jalan Pada Hari Ini Telah di Tutup,\n"+
+        "silahkan coba lagi besok hari, Terimakasih.\n"+
+        "Jam Layanan Pendaftaraan Online Robot PI-Care 08:00 - 15:00 WITA");
+      }
     }
     
     //menu cara pengisian
@@ -248,6 +287,14 @@ client.on('message', async (message) => {
         client.sendMessage(message.from,media);
       }
     }
+
+    //menu cara 
+    else if(message.body === '3'){
+      console.log(getState(state,message._data.id.remote));
+      let media = null
+      client.sendMessage(message.from,list_kata_kunci);
+    }
+
     else if(message.body.toLocaleLowerCase() === 'halo'){
       create_state(message._data.id.remote,0);
       client.sendMessage(message.from,header);
@@ -511,7 +558,7 @@ client.on('message', async (message) => {
           message.reply("Dimohon untuk terlebih dahulu reply/balas pesan form pendaftaran yang anda kirim, terimakasih.");
         }else{
           let nama = message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1]
-          let nik = message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1]
+          let nik = message._data.quotedMsg.body.split(/\r?\n/)[2].split(':')[1]
           if(typeof(nama)!='undefined'){
             if(message.hasMedia){
               // console.log(message)
@@ -556,7 +603,7 @@ client.on('message', async (message) => {
           message.reply("Dimohon untuk terlebih dahulu reply/balas pesan form pendaftaran yang anda kirim, terimakasih.");
         }else{
           let nama = message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1]
-          let nik = message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1]
+          let nik = message._data.quotedMsg.body.split(/\r?\n/)[2].split(':')[1]
           if(typeof(nama)!='undefined'){
             if(message.hasMedia){
               // console.log(message)
