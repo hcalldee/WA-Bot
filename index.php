@@ -582,6 +582,16 @@
             ("0" + now.getDate()).slice(-2);
         return date;
     }
+    function HumanDate(param) {
+        let now = new Date(param);
+        let date =
+            ("0" + now.getDate()).slice(-2) +
+            "/" +
+            ("0" + now.getMonth() + 1).slice(-2) +
+            "/" +
+            now.getFullYear();
+        return date;
+    }
     function clear(params) {
         let next = $(params+' .modal-body').find('.form-group').find('.form-control')
         Object.keys(next).forEach(key => {
@@ -627,7 +637,7 @@
                 let myTable = $('#dataTable').DataTable()
                 myTable.clear().draw()
                 data.forEach(ele => {
-                    console.log(buttonPreserve(ele))
+                    // console.log(buttonPreserve(ele))
                     myTable.row.add([
                         counter, 
                         ele.Nama, 
@@ -803,18 +813,20 @@
         $("#no_rm").keypress(function(event) {
             let keycode = event.keyCode || event.which;
             let no_rm = $(this).val()
+            let tgl_periksa = $('#tanggal_layanan').val()
             if($(this).val()!=""){
                 if(keycode == '13') {
                     $.ajax({
                         type: "POST",
                         url: "http://192.168.1.200:8082/getVerifikasi/",
                         data:{
-                            no_rm:no_rm
+                            no_rm:no_rm,
+                            tgl_periksa:tgl_periksa
                         },
                         dataType: "JSON",
                         success: function (data) {
                             data = data[0]
-                            $('#poli_tujuan').val(data.nm_poli)
+                            $('#poli_tujuan').val(data.nm_poli+'_'+data.hari_layanan+'_'+data.nm_dokter)
                             $('#no_antrian').val(data.antrian)
                             $('#jam_layanan').val(data.jam_layanan)
                         }
@@ -857,10 +869,10 @@
             "Assalamualaikum Wr. Wb. \n"+
             "Yth. Tn/Ny."+$('#Nama_pendaftar').val()+"\n"+
             "Nomor Rekam Medis : "+$('#no_rm').val()+"\n"+
-            "Pendaftaran di tanggal "+$('#tanggal_layanan').val()+" berhasil dilakukan\n"+
-            "Nomor Antrian Anda :"+$('#no_antrian').val()+"\n"+
-            "Silahkan datang pada Jam : "+$('#jam_layanan').val()+"\n"+
-            "di Poli : "+$('#poli_tujuan').val()+"\n"+
+            "Pendaftaran di hari "+$('#poli_tujuan').val().split('_')[1]+" tanggal "+HumanDate($('#tanggal_layanan').val())+" berhasil dilakukan\n"+
+            "Nomor Antrian Anda : "+$('#no_antrian').val()+"\n"+
+            "Silahkan datang pada Jam : "+$('#jam_layanan').val().split(':')[0]+':'+$('#jam_layanan').val().split(':')[1]+" WITA \n"+
+            "di Poli : "+$('#poli_tujuan').val().split('_')[0]+' '+$('#poli_tujuan').val().split('_')[2]+"\n"+
             "di Mohon untuk datang 5 menit lebih awal dan langsung menuju Ruangan";
                 
             $.post('conf/api-serv.php',{setVerifikasi:$(this).attr('data-id')}, function(data){

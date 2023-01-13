@@ -49,7 +49,7 @@ function array_search(numb,param) {
            return data.notelp == param
        })
      if(idx!==undefined){
-       return [idx.idx,true]
+       return [idx.idx,true,idx.state]
      }else{
        return [null,false]
      }

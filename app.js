@@ -21,6 +21,14 @@ const client = new Client({
 });
 // const client = new Client();
 
+function typeFile(params) {
+  let state = false
+  if(params ==  'image/jpeg'){
+    state = true
+  }
+  return state
+}
+
 client.initialize();
 
 function getDateToday() {
@@ -32,7 +40,7 @@ function getDateToday() {
 
 function getJamLayanan() {
   const jam_buka = "08:00:00";
-  const jam_tutup = "15:00:00";
+  const jam_tutup = "12:00:00";
   const regExp = /(\d{1,2})\:(\d{1,2})\:(\d{1,2})/;
   let timeStamp= Date.now()
   let now= new Date(timeStamp);
@@ -157,7 +165,8 @@ let string_menu=
 "Silahkan pilih menu dengan mengirimkan angka pada menu yang tersedia\n"+
 "1. Informasi Pengisian Form Pendaftaran Rawat Jalan\n"+
 "2. Daftar Rawat Jalan\n"+
-"3. List Kata Kunci WA Robot";
+"3. List Kata Kunci WA Robot\n"+
+"0. Kembali";
 
 let list_kata_kunci=
 "List Kata Kunci Upload :\n"+
@@ -182,6 +191,7 @@ function TStoT(unix_timestamp=null){
 }
 
 var temp_data_user = []
+var temp_state_user = []
 
 let contoh_pengisian;
 
@@ -243,6 +253,22 @@ function timestamp_checker(notelp,timestamp) {
   }
 }
 
+function state_checker(notelp,setstate) {
+  // let now = Date.now()
+  let found = fil.array_search(temp_state_user,notelp)
+  if(found[1]){
+    temp_state_user[found[0]].state = setstate
+  }else{
+    temp_state_user.push(
+        {
+          "idx":temp_state_user.length,
+          "notelp":notelp,
+          "state":0,
+        }
+      )
+  }
+}
+
 client.on('message', async (message) => {
   // delayer
   if(timestamp_checker(message._data.id.remote.split('@')[0],message.timestamp)){
@@ -259,44 +285,52 @@ client.on('message', async (message) => {
     // }
     
     //menu registrasi form
-    if(message.body === '2'&&typeof(getState(state,message._data.id.remote))!='undefined'){
-      if(getJamLayanan()){
-        state = changeState(state,message._data.id.remote,2)
-        // console.log(getState(state,message._data.id.remote));
-        client.sendMessage(message.from,"Silahkan Lengkapi Data Diri Anda & Dokumen-Dokumen yang diperlukan \n");
-        client.sendMessage(message.from,"Dimohon Untuk Mengisi Form pendaftaran sesuai format dengan menyalin form isian dibawah ini \n");
-        client.sendMessage(message.from,form_data_diri);
-        client.sendMessage(message.from,info_tambahan);
-        client.sendMessage(message.from,info_tambahan2);
-        client.sendMessage(message.from,info_tambahan3);
-      }else{
-        client.sendMessage(message.from,
-        "Mohon Maaf Pendaftaran Layanan Rawat Jalan Pada Hari Ini Telah di Tutup,\n"+
-        "silahkan coba lagi besok hari, Terimakasih.\n"+
-        "Jam Layanan Pendaftaraan Online Robot PI-Care 08:00 - 15:00 WITA");
+    if(message.body === '2'){
+      if(fil.array_search(temp_state_user,message._data.id.remote)[2]===0){
+        if(getJamLayanan()){
+          state_checker(message._data.id.remote,2)
+          console.log(fil.array_search(temp_state_user,message._data.id.remote)[2])
+          // console.log(getState(state,message._data.id.remote));
+          client.sendMessage(message.from,"Silahkan Lengkapi Data Diri Anda & Dokumen-Dokumen yang diperlukan \n");
+          client.sendMessage(message.from,"Dimohon Untuk Mengisi Form pendaftaran sesuai format dengan menyalin form isian dibawah ini \n");
+          client.sendMessage(message.from,form_data_diri);
+          client.sendMessage(message.from,info_tambahan);
+          client.sendMessage(message.from,info_tambahan2);
+          client.sendMessage(message.from,info_tambahan3);
+        }else{
+          client.sendMessage(message.from,
+          "Mohon Maaf Pendaftaran Layanan Rawat Jalan Pada Hari Ini Telah di Tutup,\n"+
+          "silahkan coba lagi besok hari, Terimakasih.\n"+
+          "Jam Layanan Pendaftaraan Online Robot PI-Care 08:00 - 15:00 WITA");
+        }
       }
     }
     
     //menu cara pengisian
-    else if((message.body === '1'||message.body.toLocaleLowerCase() === 'contoh isian form')&&typeof(getState(state,message._data.id.remote))!='undefined'){
-      console.log(getState(state,message._data.id.remote));
-      let media = null
-      client.sendMessage(message.from,'Berikut Merupakan cara pengisian Form Pendaftaran Layanana Rawat Jalan Rumah Sakit Pelita Insani');
-      for (let index = 0; index < 3; index++) {
-        media = MessageMedia.fromFilePath('./assets/dokumentasi/guide/'+(index+1)+'.jpg');
-        client.sendMessage(message.from,media);
+    else if((message.body === '1'||message.body.toLocaleLowerCase() === 'contoh isian form')){
+      if(fil.array_search(temp_state_user,message._data.id.remote)[2]===0){
+        let media = null
+        client.sendMessage(message.from,'Berikut Merupakan cara pengisian Form Pendaftaran Layanana Rawat Jalan Rumah Sakit Pelita Insani');
+        for (let index = 0; index < 3; index++) {
+          media = MessageMedia.fromFilePath('./assets/dokumentasi/guide/'+(index+1)+'.jpg');
+          client.sendMessage(message.from,media);
+        }
       }
     }
 
     //menu cara 
     else if(message.body === '3'){
+      // state = changeState(state,message._data.id.remote,3);
       console.log(getState(state,message._data.id.remote));
       let media = null
       client.sendMessage(message.from,list_kata_kunci);
     }
 
     else if(message.body.toLocaleLowerCase() === 'halo'){
-      create_state(message._data.id.remote,0);
+      // create_state(message._data.id.remote,0);
+      state_checker(message._data.id.remote,0)
+      // console.log(temp_state_user)
+      console.log()
       client.sendMessage(message.from,header);
       client.sendMessage(message.from,string_menu);
     }
@@ -315,7 +349,7 @@ client.on('message', async (message) => {
     // }
   
     else if(message.body.toLocaleLowerCase() === 'batal'){
-      if(getState(state,message._data.id.remote)==2){
+      if(fil.array_search(temp_state_user,message._data.id.remote)[2]===2){
         if(message._data.quotedMsg===undefined){
           message.reply("Dimohon untuk terlebih dahulu reply/balas pesan form pendaftaran yang anda kirim, terimakasih.");
         }else{
@@ -327,21 +361,30 @@ client.on('message', async (message) => {
         }
       }
     }
-  
+
+    // else if(message.body == '0'){
+    //   console.log(getState(state,message._data.id.remote))
+    //   if((getState(state,message._data.id.remote)==2||getState(state,message._data.id.remote)==1)&&getState(state,message._data.id.remote)!=0){
+    //   state = changeState(state,message._data.id.remote,0);
+    //   client.sendMessage(message.from,string_menu);
+    //   }
+    // }
+
     else if(message.body.toLocaleLowerCase() === 'selesai isi'){
-      console.log(getState(state,message._data.id.remote));
+      // console.log(getState(state,message._data.id.remote));
       if(message._data.quotedMsg===undefined){
         message.reply("Dimohon untuk terlebih dahulu reply/balas pesan form pendaftaran yang anda kirim, terimakasih.");
       }else{
-        state = changeState(state,message._data.id.remote,0);
+        state_checker(message._data.id.remote,0)
         dbm.insertData(message._data.id.remote.split('@')[0]+''+removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[2].split(':')[1])+''+getDateToday())
         message.reply("Terimakasih Tn/Ny. "+message._data.notifyName+" Atas Partisipasi Anda, silahkan menunggu konfirmasi Admin kami. Terimakasih");
       }
     }
   
     else if(combination_check(message.body.toLocaleLowerCase(),"form pendaftaran pasien")){
-      console.log(getState(state,message._data.id.remote));
-      if(getState(state,message._data.id.remote)==2){
+      // console.log(getState(state,message._data.id.remote));
+      console.log(fil.array_search(temp_state_user,message._data.id.remote)[2])
+      if(fil.array_search(temp_state_user,message._data.id.remote)[2]===2){
         let data = message.body
         const result = data.split(/\r?\n/);
         let dataDaftar = {
@@ -371,7 +414,7 @@ client.on('message', async (message) => {
   
     //upload kartu bpjs
     else if(combination_check(message.body.toLocaleLowerCase(),"upload kartu jaminan kesehatan")){
-      if(getState(state,message._data.id.remote)==2){
+      if(fil.array_search(temp_state_user,message._data.id.remote)[2]===2){
         if(message._data.quotedMsg===undefined){
           message.reply("Dimohon untuk terlebih dahulu reply/balas pesan form pendaftaran yang anda kirim, terimakasih.");
         }else{
@@ -381,31 +424,35 @@ client.on('message', async (message) => {
             if(message.hasMedia){
               // console.log(message)
               const mediafile = await message.downloadMedia();
-              // let nama = message.body.split(':')[1]
-              // console.log(nama)
-              // nama = nama.replace(/\s/g, '')
-              fs.writeFile(
-                "./upload/" +removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuAsuransi.'+mediafile.mimetype.split("/")[1],
-                mediafile.data,
-                "base64",
-                function (err) {
-                  if (err) {
-                    // console.log(err);
-                    console.log("Gagal Menyimpan, Silahkan Coba Lagi")
-                  }else{
-                    let id_daftar = message._data.id.remote.split('@')[0]+''+removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[2].split(':')[1])+''+getDateToday()
-                    let temp_nama = removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1])
-                    fil.updateData(
-                        datadir,
-                        jsonfilename,
-                        id_daftar,
-                        fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'KartuAsuransi','value':removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuAsuransi.'+mediafile.mimetype.split("/")[1]})
-                    )
-                    com.compress(removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuAsuransi.'+mediafile.mimetype.split("/")[1])
-                    message.reply("Dokumen Kartu Jaminan Kesehatan Tn/Ny."+temp_nama+" Berhasil Disimpan");
+              if(typeFile(mediafile.mimetype)){
+                // let nama = message.body.split(':')[1]
+                // console.log(nama)
+                // nama = nama.replace(/\s/g, '')
+                fs.writeFile(
+                  "./upload/" +removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuAsuransi.'+mediafile.mimetype.split("/")[1],
+                  mediafile.data,
+                  "base64",
+                  function (err) {
+                    if (err) {
+                      // console.log(err);
+                      console.log("Gagal Menyimpan, Silahkan Coba Lagi")
+                    }else{
+                      let id_daftar = message._data.id.remote.split('@')[0]+''+removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[2].split(':')[1])+''+getDateToday()
+                      let temp_nama = removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1])
+                      fil.updateData(
+                          datadir,
+                          jsonfilename,
+                          id_daftar,
+                          fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'KartuAsuransi','value':removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuAsuransi.'+mediafile.mimetype.split("/")[1]})
+                      )
+                      com.compress(removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuAsuransi.'+mediafile.mimetype.split("/")[1])
+                      message.reply("Dokumen Kartu Jaminan Kesehatan Tn/Ny."+temp_nama+" Berhasil Disimpan");
+                    }
                   }
-                }
-              );
+                );
+              }else{
+                message.reply("Silahkan mengirim dokumen lampiran hanya berupa foto (img,png,jpeg,jpg)");    
+              }
             }
           }
           else{
@@ -417,7 +464,9 @@ client.on('message', async (message) => {
   
     //upload KTP
     else if(combination_check(message.body.toLocaleLowerCase(),"upload ktp")){
-      if(getState(state,message._data.id.remote)==2){
+      console.log(fil.array_search(temp_state_user,message._data.id.remote))
+      if(fil.array_search(temp_state_user,message._data.id.remote)[2]===2){
+      // if(getState(state,message._data.id.remote)==2){
         if(message._data.quotedMsg===undefined){
           message.reply("Dimohon untuk terlebih dahulu reply/balas pesan form pendaftaran yang anda kirim, terimakasih.");
         }else{
@@ -427,31 +476,35 @@ client.on('message', async (message) => {
             if(message.hasMedia){
               // console.log(message)
               const mediafile = await message.downloadMedia();
-              // let nama = message.body.split(':')[1]
-              // console.log(nama)
-              // nama = nama.replace(/\s/g, '')
-              fs.writeFile(
-                "./upload/" +removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KTP.'+mediafile.mimetype.split("/")[1],
-                mediafile.data,
-                "base64",
-                function (err) {
-                  if (err) {
-                    // console.log(err);
-                    console.log("Gagal Menyimpan, Silahkan Coba Lagi")
-                  }else{
-                    let id_daftar = message._data.id.remote.split('@')[0]+''+removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[2].split(':')[1])+''+getDateToday()
-                    let temp_nama = removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1])
-                    fil.updateData(
-                          datadir,
-                          jsonfilename,
-                          id_daftar,
-                          fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'KTP','value':removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KTP.'+mediafile.mimetype.split("/")[1]})
-                      )
-                    com.compress(removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KTP.'+mediafile.mimetype.split("/")[1])
-                    message.reply("Dokumen KTP Tn/Ny."+temp_nama+" Berhasil Disimpan");
+              if(typeFile(mediafile.mimetype)){
+                // let nama = message.body.split(':')[1]
+                // console.log(nama)
+                // nama = nama.replace(/\s/g, '')
+                fs.writeFile(
+                  "./upload/" +removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KTP.'+mediafile.mimetype.split("/")[1],
+                  mediafile.data,
+                  "base64",
+                  function (err) {
+                    if (err) {
+                      // console.log(err);
+                      console.log("Gagal Menyimpan, Silahkan Coba Lagi")
+                    }else{
+                      let id_daftar = message._data.id.remote.split('@')[0]+''+removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[2].split(':')[1])+''+getDateToday()
+                      let temp_nama = removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1])
+                      fil.updateData(
+                            datadir,
+                            jsonfilename,
+                            id_daftar,
+                            fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'KTP','value':removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KTP.'+mediafile.mimetype.split("/")[1]})
+                        )
+                      com.compress(removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KTP.'+mediafile.mimetype.split("/")[1])
+                      message.reply("Dokumen KTP Tn/Ny."+temp_nama+" Berhasil Disimpan");
+                    }
                   }
-                }
-              );
+                );
+              }else{
+                message.reply("Silahkan mengirim dokumen lampiran hanya berupa foto (img,png,jpeg,jpg)");    
+              }
             }
           }
           else{
@@ -463,7 +516,8 @@ client.on('message', async (message) => {
   
     //upload Kartu RS
     else if(combination_check(message.body.toLocaleLowerCase(),"upload kartu berobat")){
-      if(getState(state,message._data.id.remote)==2){
+      //
+       if(fil.array_search(temp_state_user,message._data.id.remote)[2]===2){
         if(message._data.quotedMsg===undefined){
           message.reply("Dimohon untuk terlebih dahulu reply/balas pesan form pendaftaran yang anda kirim, terimakasih.");
         }else{
@@ -475,28 +529,32 @@ client.on('message', async (message) => {
               const mediafile = await message.downloadMedia();
               // console.log(nama)
               // nama = nama.replace(/\s/g, '')
-              fs.writeFile(
-                "./upload/" +removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuRSPI.'+mediafile.mimetype.split("/")[1],
-                mediafile.data,
-                "base64",
-                function (err) {
-                  if (err) {
-                    // console.log(err);
-                    console.log("Gagal Menyimpan, Silahkan Coba Lagi")
-                  }else{
-                    let id_daftar = message._data.id.remote.split('@')[0]+''+removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[2].split(':')[1])+''+getDateToday()
-                    let temp_nama = removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1])
-                    fil.updateData(
-                          datadir,
-                          jsonfilename,
-                          id_daftar,
-                          fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'KartuRSPI','value':removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuRSPI.'+mediafile.mimetype.split("/")[1]})
-                      )
-                      com.compress(removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuRSPI.'+mediafile.mimetype.split("/")[1])
-                    message.reply("Dokumen Kartu Identitas Berobat Tn/Ny."+temp_nama+" Berhasil Disimpan");
+              if(typeFile(mediafile.mimetype)){
+                fs.writeFile(
+                  "./upload/" +removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuRSPI.'+mediafile.mimetype.split("/")[1],
+                  mediafile.data,
+                  "base64",
+                  function (err) {
+                    if (err) {
+                      // console.log(err);
+                      console.log("Gagal Menyimpan, Silahkan Coba Lagi")
+                    }else{
+                      let id_daftar = message._data.id.remote.split('@')[0]+''+removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[2].split(':')[1])+''+getDateToday()
+                      let temp_nama = removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1])
+                      fil.updateData(
+                            datadir,
+                            jsonfilename,
+                            id_daftar,
+                            fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'KartuRSPI','value':removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuRSPI.'+mediafile.mimetype.split("/")[1]})
+                        )
+                        com.compress(removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'KartuRSPI.'+mediafile.mimetype.split("/")[1])
+                      message.reply("Dokumen Kartu Identitas Berobat Tn/Ny."+temp_nama+" Berhasil Disimpan");
+                    }
                   }
-                }
-              );
+                );
+              }else{
+                message.reply("Silahkan mengirim dokumen lampiran hanya berupa foto (img,png,jpeg,jpg)");    
+              }
             }
           }
           else{
@@ -508,7 +566,8 @@ client.on('message', async (message) => {
   
     //upload Kartu GL
     else if(combination_check(message.body.toLocaleLowerCase(),"upload gl")){
-      if(getState(state,message._data.id.remote)==2){
+      if(fil.array_search(temp_state_user,message._data.id.remote)[2]===2){
+      // if(getState(state,message._data.id.remote)==2){
         if(message._data.quotedMsg===undefined){
           message.reply("Dimohon untuk terlebih dahulu reply/balas pesan form pendaftaran yang anda kirim, terimakasih.");
         }else{
@@ -520,28 +579,32 @@ client.on('message', async (message) => {
               const mediafile = await message.downloadMedia();
               // console.log(nama)
               // nama = nama.replace(/\s/g, '')
-              fs.writeFile(
-                "./upload/" +removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'GL.'+mediafile.mimetype.split("/")[1],
-                mediafile.data,
-                "base64",
-                function (err) {
-                  if (err) {
-                    // console.log(err);
-                    console.log("Gagal Menyimpan, Silahkan Coba Lagi")
-                  }else{
-                    let id_daftar = message._data.id.remote.split('@')[0]+''+removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[2].split(':')[1])+''+getDateToday()
-                    let temp_nama = removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1])
-                    fil.updateData(
-                          datadir,
-                          jsonfilename,
-                          id_daftar,
-                          fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'GL','value':removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'GL.'+mediafile.mimetype.split("/")[1]})
-                      )
-                      com.compress(removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'GL.'+mediafile.mimetype.split("/")[1])
-                    message.reply("Dokumen Guarantee Letter Tn/Ny."+temp_nama+" Berhasil Disimpan");
+              if(typeFile(mediafile.mimetype)){
+                fs.writeFile(
+                  "./upload/" +removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'GL.'+mediafile.mimetype.split("/")[1],
+                  mediafile.data,
+                  "base64",
+                  function (err) {
+                    if (err) {
+                      // console.log(err);
+                      console.log("Gagal Menyimpan, Silahkan Coba Lagi")
+                    }else{
+                      let id_daftar = message._data.id.remote.split('@')[0]+''+removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[2].split(':')[1])+''+getDateToday()
+                      let temp_nama = removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1])
+                      fil.updateData(
+                            datadir,
+                            jsonfilename,
+                            id_daftar,
+                            fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'GL','value':removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'GL.'+mediafile.mimetype.split("/")[1]})
+                        )
+                        com.compress(removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'GL.'+mediafile.mimetype.split("/")[1])
+                      message.reply("Dokumen Guarantee Letter Tn/Ny."+temp_nama+" Berhasil Disimpan");
+                    }
                   }
-                }
-              );
+                );
+              }else{
+                message.reply("Silahkan mengirim dokumen lampiran hanya berupa foto (img,png,jpeg,jpg)");    
+              }
             }
           }
           else{
@@ -553,7 +616,8 @@ client.on('message', async (message) => {
   
     //upload Kartu SR
     else if(combination_check(message.body.toLocaleLowerCase(),"upload surat rujukan")){
-      if(getState(state,message._data.id.remote)==2){
+      if(fil.array_search(temp_state_user,message._data.id.remote)[2]===2){
+      // if(getState(state,message._data.id.remote)==2){
         if(message._data.quotedMsg===undefined){
           message.reply("Dimohon untuk terlebih dahulu reply/balas pesan form pendaftaran yang anda kirim, terimakasih.");
         }else{
@@ -563,30 +627,34 @@ client.on('message', async (message) => {
             if(message.hasMedia){
               // console.log(message)
               const mediafile = await message.downloadMedia();
-              // console.log(nama)
-              // nama = nama.replace(/\s/g, '')
-              fs.writeFile(
-                "./upload/" +removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SR.'+mediafile.mimetype.split("/")[1],
-                mediafile.data,
-                "base64",
-                function (err) {
-                  if (err) {
-                    // console.log(err);
-                    console.log("Gagal Menyimpan, Silahkan Coba Lagi")
-                  }else{
-                    let id_daftar = message._data.id.remote.split('@')[0]+''+removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[2].split(':')[1])+''+getDateToday()
-                    let temp_nama = removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1])
-                    fil.updateData(
-                          datadir,
-                          jsonfilename,
-                          id_daftar,
-                          fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'SR','value':removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SR.'+mediafile.mimetype.split("/")[1]})
-                      )
-                      com.compress(removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SR.'+mediafile.mimetype.split("/")[1])
-                    message.reply("Dokumen Surat Rujukan Tn/Ny."+temp_nama+" Berhasil Disimpan");
+              if(typeFile(mediafile.mimetype)){
+                // console.log(nama)
+                // nama = nama.replace(/\s/g, '')
+                fs.writeFile(
+                  "./upload/" +removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SR.'+mediafile.mimetype.split("/")[1],
+                  mediafile.data,
+                  "base64",
+                  function (err) {
+                    if (err) {
+                      // console.log(err);
+                      console.log("Gagal Menyimpan, Silahkan Coba Lagi")
+                    }else{
+                      let id_daftar = message._data.id.remote.split('@')[0]+''+removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[2].split(':')[1])+''+getDateToday()
+                      let temp_nama = removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1])
+                      fil.updateData(
+                            datadir,
+                            jsonfilename,
+                            id_daftar,
+                            fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'SR','value':removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SR.'+mediafile.mimetype.split("/")[1]})
+                        )
+                        com.compress(removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SR.'+mediafile.mimetype.split("/")[1])
+                      message.reply("Dokumen Surat Rujukan Tn/Ny."+temp_nama+" Berhasil Disimpan");
+                    }
                   }
-                }
-              );
+                );
+              }else{
+                message.reply("Silahkan mengirim dokumen lampiran hanya berupa foto (img,png,jpeg,jpg)");    
+              }
             }
           }
           else{
@@ -598,7 +666,8 @@ client.on('message', async (message) => {
   
     //upload Kartu SK
     else if(combination_check(message.body.toLocaleLowerCase(),"upload surat kontrol")){
-      if(getState(state,message._data.id.remote)==2){
+      if(fil.array_search(temp_state_user,message._data.id.remote)[2]===2){
+      // if(getState(state,message._data.id.remote)==2){
         if(message._data.quotedMsg===undefined){
           message.reply("Dimohon untuk terlebih dahulu reply/balas pesan form pendaftaran yang anda kirim, terimakasih.");
         }else{
@@ -608,30 +677,34 @@ client.on('message', async (message) => {
             if(message.hasMedia){
               // console.log(message)
               const mediafile = await message.downloadMedia();
-              // console.log(nama)
-              // nama = nama.replace(/\s/g, '')
-              fs.writeFile(
-                "./upload/" +removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SK.'+mediafile.mimetype.split("/")[1],
-                mediafile.data,
-                "base64",
-                function (err) {
-                  if (err) {
-                    // console.log(err);
-                    console.log("Gagal Menyimpan, Silahkan Coba Lagi")
-                  }else{
-                    let id_daftar = message._data.id.remote.split('@')[0]+''+removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[2].split(':')[1])+''+getDateToday()
-                    let temp_nama = removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1])
-                    fil.updateData(
-                          datadir,
-                          jsonfilename,
-                          id_daftar,
-                          fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'SK','value':removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SK.'+mediafile.mimetype.split("/")[1]})
-                      )
-                    com.compress(removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SK.'+mediafile.mimetype.split("/")[1])
-                    message.reply("Dokumen Surat Kontrol Tn/Ny."+temp_nama+" Berhasil Disimpan");
+              if(typeFile(mediafile.mimetype)){
+                // console.log(nama)
+                // nama = nama.replace(/\s/g, '')
+                fs.writeFile(
+                  "./upload/" +removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SK.'+mediafile.mimetype.split("/")[1],
+                  mediafile.data,
+                  "base64",
+                  function (err) {
+                    if (err) {
+                      // console.log(err);
+                      console.log("Gagal Menyimpan, Silahkan Coba Lagi")
+                    }else{
+                      let id_daftar = message._data.id.remote.split('@')[0]+''+removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[2].split(':')[1])+''+getDateToday()
+                      let temp_nama = removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[1].split(':')[1])
+                      fil.updateData(
+                            datadir,
+                            jsonfilename,
+                            id_daftar,
+                            fil.add_ele(datadir,jsonfilename,id_daftar,{'key':'SK','value':removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SK.'+mediafile.mimetype.split("/")[1]})
+                        )
+                      com.compress(removeSpasi(nik).replace(/\s/g, '_')+'_'+ message._data.id.remote.split("@")[0]+'_'+'SK.'+mediafile.mimetype.split("/")[1])
+                      message.reply("Dokumen Surat Kontrol Tn/Ny."+temp_nama+" Berhasil Disimpan");
+                    }
                   }
-                }
-              );
+                );
+              }else{
+                message.reply("Silahkan mengirim dokumen lampiran hanya berupa foto (img,png,jpeg,jpg)");    
+              }
             }
           }
           else{
@@ -642,8 +715,8 @@ client.on('message', async (message) => {
     }
   
     
-    else if(message.body.toLocaleLowerCase() === 'debug'){
-      console.log(TStoT(message))
+    else if(message.body.toLocaleLowerCase() === '#@debug'){
+      console.log(message)
       // console.log(removeSpasi(message._data.quotedMsg.body.split(/\r?\n/)[2].split(':')[1]))
     }
     
