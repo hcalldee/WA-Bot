@@ -651,6 +651,8 @@
                 });
                 // console.log(data)
             }else{
+                alert("data tidak ditemukan")
+                $('#dataTable').DataTable().clear().draw()
                 // console.log("tidak ada data")
             }
         });
@@ -661,6 +663,7 @@
             $.ajax({
                 type: "GET",
                 url: "http://192.168.1.200:8082/getPoli/",
+                // url: "http://192.168.1.4:8082/getPoli/",
                 dataType: "JSON",
                 success: function (data) {
                     // // fungsi setbooking
@@ -684,6 +687,7 @@
             $.ajax({
                 type: "GET",
                 url: "http://192.168.1.200:8082/getPoliDokter/",
+                // url: "http://192.168.1.4:8082/getPoliDokter/",
                 dataType: "JSON",
                 success: function (data) {
                     // fungsi setbookinglama
@@ -728,6 +732,7 @@
         $.ajax({
             type: "POST",
             url: "http://192.168.1.200:8082/daftarBaruPasienLama/",
+            // url: "http://192.168.1.4:8082/daftarBaruPasienLama/",
             data:{
                 send:data_kirim
             },
@@ -752,6 +757,7 @@
             $.ajax({
                 type: "POST",
                 url: "http://192.168.1.200:8082/setBooking/",
+                // url: "http://192.168.1.4:8082/setBooking/",
                 data:{
                     send:data_kirim
                 },
@@ -819,6 +825,7 @@
                     $.ajax({
                         type: "POST",
                         url: "http://192.168.1.200:8082/getVerifikasi/",
+                        // url: "http://192.168.1.4:8082/getVerifikasi/",
                         data:{
                             no_rm:no_rm,
                             tgl_periksa:tgl_periksa
@@ -846,6 +853,7 @@
                     $.ajax({
                         type: "POST",
                         url: "http://192.168.1.200:8082/getRM/",
+                        // url: "http://192.168.1.4:8082/getRM/",
                         data:{
                             no_rm:rm
                         },
@@ -883,6 +891,7 @@
                     $.ajax({
                         type: "POST",
                         url: "http://192.168.1.200:8081/sendToClient/",
+                        // url: "http://192.168.1.4:8081/sendToClient/",
                         data: {
                             no:no_wa,
                             message:pesan
@@ -929,6 +938,7 @@
                     $.ajax({
                         type: "POST",
                         url: "http://192.168.1.200:8081/sendToClient",
+                        // url: "http://192.168.1.4:8081/sendToClient",
                         data: {
                             hapus_id:id,
                             no:no_wa,

@@ -1,21 +1,18 @@
-2023/01/12-13:32:55.395 2544 Reusing MANIFEST C:\xampp\htdocs\WA-Bot\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
-2023/01/12-13:32:55.396 2544 Recovering log #10
-2023/01/12-13:32:55.536 2544 Reusing old log C:\xampp\htdocs\WA-Bot\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000010.log 
-2023/01/12-13:38:38.369 2c18 Level-0 table #15: started
-2023/01/12-13:38:38.718 2c18 Level-0 table #15: 1118399 bytes OK
-2023/01/12-13:38:38.757 2c18 Delete type=0 #10
-2023/01/12-13:38:40.938 3398 Compacting 1@1 + 1@2 files
-2023/01/12-13:38:41.099 3398 Generated table #16@1: 21146 keys, 902311 bytes
-2023/01/12-13:38:41.099 3398 Compacted 1@1 + 1@2 files => 902311 bytes
-2023/01/12-13:38:41.132 3398 compacted to: files[ 0 0 1 0 0 0 0 ]
-2023/01/12-13:38:41.133 3398 Delete type=2 #12
-2023/01/12-13:38:41.133 3398 Delete type=2 #15
-2023/01/12-13:56:08.387 2c18 Level-0 table #18: started
-2023/01/12-13:56:08.751 2c18 Level-0 table #18: 1332539 bytes OK
-2023/01/12-13:56:08.775 2c18 Delete type=0 #14
-2023/01/12-13:57:24.403 258 Compacting 1@1 + 1@2 files
-2023/01/12-13:57:24.672 258 Generated table #19@1: 28945 keys, 1267284 bytes
-2023/01/12-13:57:24.672 258 Compacted 1@1 + 1@2 files => 1267284 bytes
-2023/01/12-13:57:24.736 258 compacted to: files[ 0 0 1 0 0 0 0 ]
-2023/01/12-13:57:24.736 258 Delete type=2 #16
-2023/01/12-13:57:24.736 258 Delete type=2 #18
+2023/01/16-10:09:12.911 18e8 Reusing MANIFEST C:\xampp\htdocs\WA-Bot\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2023/01/16-10:09:12.914 18e8 Recovering log #114
+2023/01/16-10:09:13.134 18e8 Reusing old log C:\xampp\htdocs\WA-Bot\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000114.log 
+2023/01/16-10:09:24.788 20fc Level-0 table #122: started
+2023/01/16-10:09:25.020 20fc Level-0 table #122: 1244164 bytes OK
+2023/01/16-10:09:25.054 20fc Delete type=0 #114
+2023/01/16-10:09:25.939 2104 Compacting 1@1 + 4@2 files
+2023/01/16-10:09:26.291 2104 Generated table #123@1: 30155 keys, 2255463 bytes
+2023/01/16-10:09:26.678 2104 Generated table #124@1: 40823 keys, 2259957 bytes
+2023/01/16-10:09:27.033 2104 Generated table #125@1: 49705 keys, 2186281 bytes
+2023/01/16-10:09:27.304 2104 Generated table #126@1: 93248 keys, 1728113 bytes
+2023/01/16-10:09:27.304 2104 Compacted 1@1 + 4@2 files => 8429814 bytes
+2023/01/16-10:09:27.326 2104 compacted to: files[ 0 0 4 0 0 0 0 ]
+2023/01/16-10:09:27.327 2104 Delete type=2 #116
+2023/01/16-10:09:27.327 2104 Delete type=2 #117
+2023/01/16-10:09:27.327 2104 Delete type=2 #118
+2023/01/16-10:09:27.327 2104 Delete type=2 #119
+2023/01/16-10:09:27.327 2104 Delete type=2 #122
