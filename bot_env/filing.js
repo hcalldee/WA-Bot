@@ -102,13 +102,12 @@ function checker(data) {
     Object.keys(data).forEach(key => {
         if (data[key]===undefined||data[key]=="") {
             state = false
-            
         }
     });
     if(!state){
-        return "silahkan isi form dengan lengkap, terimakasih";
+        return state;
     }else{
-        return state
+        return state;
     }
 }
 

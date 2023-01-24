@@ -1,6 +1,7 @@
 <?php
+// tambahan
     include './conf/conn.php';
-    $sql = "SELECT id_daftar, Nama, NIK ,Alamat, Jenis_Bayar, Poli_tujuan, KartuAsuransi, KartuRSPI, KTP,  date(insert_at) as tanggal, time(insert_at) as waktu ,insert_at, date(curdate()+1) as tanggal_layanan, no_wa FROM `daftar_pasien` having tanggal = (SELECT curdate()) or tanggal = (SELECT curdate()+1) ORDER BY insert_at asc;";
+    $sql = "SELECT id_daftar, Nama, NIK ,Alamat, Jenis_Bayar, Poli_tujuan, KartuAsuransi, KartuRSPI, KTP, is_verified as status_pasien,  date(insert_at) as tanggal, time(insert_at) as waktu ,insert_at, date(curdate()+1) as tanggal_layanan, no_wa FROM `daftar_pasien` having tanggal = (SELECT curdate()) or tanggal = (SELECT curdate()+1) ORDER BY insert_at asc;";
     // $sql = "SELECT * FROM daftar_pasien";
     $_SESSION['data_pendaftar'] = sqlFetch(dbcon()->query($sql));
     $dp =  $_SESSION['data_pendaftar'];
@@ -55,6 +56,12 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="modal" data-target="#modal_data_pasien" id="cek_pasien_lama" href="#">
+                    <i class="fas fa-fw fa-list-alt"></i>
+                    <span>Cek Pasien Lama</span></a>
+            </li>
+            
 
         </ul>
         <!-- End of Sidebar -->
@@ -152,11 +159,13 @@
                                             <th>Poli Tujuan</th>
                                             <th>Dokter Tujuan</th>
                                             <th>Jam Daftar</th>
+                                            <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
+                                        // ekopre($data);
                                         $i=1;
                                         foreach ($dp as $data) {
                                         ?>
@@ -167,6 +176,14 @@
                                                 <td><?=explode('_',$data['Poli_tujuan'])[0]?></td>
                                                 <td><?=explode('_',$data['Poli_tujuan'])[1]?></td>
                                                 <td><?=$data['waktu']?></td>
+                                                <!-- tambahan -->
+                                                <td><?php
+                                                if($data['status_pasien']==0){  
+                                                    echo "<span class='badge badge-danger'>Belum Verifikasi</span>";
+                                                }else if($data['status_pasien']==2){
+                                                    echo "<span class='badge badge-success'>Terverifikasi</span>";
+                                                }
+                                                ?></td>
                                                 <td>
                                                     <div class="dropdown mb-4">
                                                         <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -435,6 +452,53 @@
             </div>
         </div>
 
+        <div class="modal fade bd-example-modal-lg" id="modal_data_pasien" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                <div class="modal-header ">
+                    <h5 class="modal-title" id="exampleModalLabel">Cek Data Pasien</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">Nama Pasien</label>
+                                <input type="text" class="form-control" id="cari_nama_pasien" placeholder="Nama Pasien">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">Tanggal Lahir</label>
+                                <input type="date" class="form-control" id="cari_tanggal_pasien">
+                            </div>
+                        </div>
+                    </div>
+                    <h6 class="modal-title" id="exampleModalLabel">Tabel Data Pasien</h6>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="tablePasien" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th style="width:20%">Nomor RM</th>
+                                    <th style="width:60%">Nama</th>
+                                    <th style="width:20%">Tanggal Lahir</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btn_cari">Cari</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
         <div class="modal fade bd-example-modal-sm" id="modalBookingBaru" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-sm" role="document">
                 <div class="modal-content">
@@ -592,6 +656,17 @@
             now.getFullYear();
         return date;
     }
+    function dateSet(param) {
+        const today = new Date(param)
+        const now = new Date(today)
+        now.setDate(now.getDate() + 1)
+        let date =
+            now.getFullYear()+ "-" +
+            ("0" + now.getMonth() + 1).slice(-2) +
+            "-" +
+            ("0" + now.getDate()).slice(-2);
+        return date;
+    }
     function clear(params) {
         let next = $(params+' .modal-body').find('.form-group').find('.form-control')
         Object.keys(next).forEach(key => {
@@ -629,15 +704,22 @@
         return btn
     }
     
+    // tambahan
     $("#filter_tgl").change(function () {
         $.post('conf/api-serv.php',{getDataTanggal:$(this).val()}, function(data){
             data = JSON.parse(data)
             let counter = 1;
             if(data.length>0){
                 let myTable = $('#dataTable').DataTable()
+                let flagver
                 myTable.clear().draw()
                 data.forEach(ele => {
                     // console.log(buttonPreserve(ele))
+                    if(ele.is_verified==0){
+                       flagver = "<span class='badge badge-danger'>Belum di Verifikasi</span>"
+                    }else if(ele.is_verified==2){
+                        flagver = "<span class='badge badge-success'>Terverifikasi</span>"
+                    }
                     myTable.row.add([
                         counter, 
                         ele.Nama, 
@@ -645,6 +727,7 @@
                         ele.Poli_tujuan.split('_')[0], 
                         ele.Poli_tujuan.split('_')[1], 
                         ele.insert_at.split(' ')[1],
+                        flagver,
                         buttonPreserve(ele)
                     ]).draw();
                     counter++;
@@ -656,6 +739,48 @@
                 // console.log("tidak ada data")
             }
         });
+    })
+
+    $('#btn_cari').click(function () {
+        if($('#cari_nama_pasien').val()==""&&$('#cari_tanggal_pasien').val()==""){
+            alert('silahkan isi nama atau tanggal lahir pasien')
+        }else{
+            $.ajax({
+                type: "POST",
+                url: "http://192.168.1.200:8082/getDataPasien/",
+                // url: "http://192.168.1.4:8082/getPoli/",
+                data:{
+                    nama:$('#cari_nama_pasien').val(),
+                    tgl_lahir:dateSet($('#cari_tanggal_pasien').val())
+                },
+                dataType: "JSON",
+                success: function (data) {
+                    // data = JSON.parse(data)
+                    if(data.length>0){
+                        //fungsi penyelamat
+                        $("#tablePasien").dataTable().fnDestroy();
+                        let tablePasien = $('#tablePasien').DataTable(
+                                {
+                                    pageLength : 5,
+                                    lengthMenu: [[5], [5]]
+                                }
+                            )
+                        tablePasien.clear().draw()
+                        data.forEach(ele => {
+                            tablePasien.row.add([
+                                ele.no_rkm_medis, 
+                                ele.nm_pasien, 
+                                ele.tgl.split('T')[0]
+                            ]).draw();
+                        });
+                    }else{
+                        alert("data tidak ditemukan")
+                        $('#tablePasien').DataTable().clear().draw()
+                    }
+                }
+            });
+        }
+        
     })
 
     
@@ -952,6 +1077,8 @@
                 }
             });
         })
+
+        
 
     </script>
 </body>

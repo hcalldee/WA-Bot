@@ -15,6 +15,16 @@ let string_menu=
 "3. List Kata Kunci WA Robot\n"+
 "0. Kembali";
 
+let announcement=
+"PENGUMUMAN\n"+
+"1. Perubahan Jadwal Poli dr. Winny hari kamis & jumat menjadi ( 14.00 - selesai )\n"+
+"2. Perubahan Jadwal Poli dr. Made hari senin - sabtu menjadi ( 15.00 - 17.00 )\n"+
+"3. Poli paru dr. Hendra Masih belum dibuka hingga waktu yang belum ditentukan\n"+
+"4. Perubahan Jadwal Poli paru dr. Norma hari selasa & kamis menjadi ( 16.00 - 18.00 )\n"+
+"5. Perubahan Jadwal Poli THT dr. Sofhia hari senin - sabtu menjadi ( 16.30 - 18.00 )\n"+
+"6. Layanan Poli gigi dan mulut dr. inggar sudah tidak beroperasi\n"+
+"Atas Perhatian Anda, Kami Ucapkan Terimakasih.";
+
 let list_kata_kunci=
 "List Kata Kunci Upload :\n"+
 "1. \"Upload KTP\" untuk upload dokumen KTP \n"+
@@ -27,7 +37,18 @@ let list_kata_kunci=
 "8. \"Batal\" untuk pembatalan registrasi sebelum proses registrasi diselesaikan\n"+
 "9. \"Selesai Isi\" untuk Menyelesaikan Proses Regsitrasi Rawat Jalan\n";
 
+let berhasil = 
+"Data Berhasil Disimpan sementara. silahkan lanjutkan proses upload lampiran sesuai dengan jenis bayar yang anda gunakan \n \n"+
+"UMUM\n KTP, Kartu Berobat *jika Memiliki\n"+
+"BPJS\n KTP, Kartu BPJS , Kartu Berobat *jika Memiliki, Surat Rujukan, Surat Kontrol *jika Kontrol\n"+
+"Pihak Ketiga\n KTP, Guarantee Letter, Kartu Berobat *jika Memiliki\n"+
+"Asuransi\n KTP, Kartu Asuransi, Kartu Berobat *jika Memiliki, Surat Rujukan, Surat Kontrol *jika Kontrol";
 
+let flag = 
+"Jadwal Layanan PI-Care \n"+
+"Minggu - Jumat, 08:00-15:00\n"+
+"Sabtu dan H-1 Hari Libur (tanggal merah) Tutup\n"+
+"Pendaftaran di Hari Minggu atau Hari Libur akan dikonfirmasi Admin pada hari kerja";
 
 var temp_data_user = []
 var temp_state_user = []
@@ -67,23 +88,6 @@ function getBrosur(path) {
     }else{
       return false
     }
-  }
-
-  function getJamLayanan() {
-    const jam_buka = "08:00:00";
-    const jam_tutup = "12:00:00";
-    const regExp = /(\d{1,2})\:(\d{1,2})\:(\d{1,2})/;
-    let timeStamp= Date.now()
-    let now= new Date(timeStamp);
-    let time = ("0" + now.getHours()).slice(-2) + ":" 
-            + ("0" + now.getMinutes()).slice(-2)+ ":"
-            + ("0" + now.getSeconds()).slice(-2);
-      if((parseInt(time.replace(regExp, "$1$2$3")) >= parseInt(jam_buka.replace(regExp, "$1$2$3")))
-      &&(parseInt(time.replace(regExp, "$1$2$3")) <= parseInt(jam_tutup.replace(regExp, "$1$2$3")))){
-        return true
-      }else{
-        return false
-      }
   }
 
   var state = [];
@@ -178,6 +182,88 @@ function getDateToday() {
 
 //   exports.temp_data_user = temp_data_user
 
+function getJamLayanan() {
+  const weekday = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+  const d = new Date();
+  let day = weekday[d.getDay()];
+  let jam_buka = "";
+  let jam_tutup = "";  
+  
+  if(day == 'Sabtu'){
+	return false
+  }else if(day=='Tutup'){
+	return false  
+  }
+  else if(day == 'Minggu'){
+	jam_buka = "08:00:00";
+	jam_tutup = "12:00:00";
+	const regExp = /(\d{1,2})\:(\d{1,2})\:(\d{1,2})/;
+	let timeStamp= Date.now()
+	let now= new Date(timeStamp);
+	let time = ("0" + now.getHours()).slice(-2) + ":" 
+			+ ("0" + now.getMinutes()).slice(-2)+ ":"
+			+ ("0" + now.getSeconds()).slice(-2);
+	if((parseInt(time.replace(regExp, "$1$2$3")) >= parseInt(jam_buka.replace(regExp, "$1$2$3")))
+	&&(parseInt(time.replace(regExp, "$1$2$3")) <= parseInt(jam_tutup.replace(regExp, "$1$2$3")))){
+	  return true
+	}else{
+	  return false
+	} 
+  }
+  else{
+	jam_buka = "08:00:00";
+	jam_tutup = "15:00:00";
+	const regExp = /(\d{1,2})\:(\d{1,2})\:(\d{1,2})/;
+	let timeStamp= Date.now()
+	let now= new Date(timeStamp);
+	let time = ("0" + now.getHours()).slice(-2) + ":" 
+			+ ("0" + now.getMinutes()).slice(-2)+ ":"
+			+ ("0" + now.getSeconds()).slice(-2);
+	if((parseInt(time.replace(regExp, "$1$2$3")) >= parseInt(jam_buka.replace(regExp, "$1$2$3")))
+	&&(parseInt(time.replace(regExp, "$1$2$3")) <= parseInt(jam_tutup.replace(regExp, "$1$2$3")))){
+	  return true
+	}else{
+	  return false
+	}
+  }
+}
+
+function flagbuka_tutup(){
+	const weekday = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+	const d = new Date();
+	let day = weekday[d.getDay()];
+	let sabtu = "Mohon Maaf Pendaftaran Layanan Rawat Jalan Pada Hari Ini Tutup,\n"+
+          "tidak ada jadwal poliklinik di hari minggu, Terimakasih.";
+	let minggu = "Mohon Maaf Pendaftaran Layanan Rawat Jalan Pada Hari Ini Telah di Tutup,\n"+
+          "silahkan coba lagi besok hari, Terimakasih.\n"+
+          "Jam Layanan Pendaftaraan Online Hari ini Robot PI-Care 08:00 - 12:00 WITA";
+	let jumat = "Mohon Maaf Pendaftaran Layanan Rawat Jalan Pada Hari Ini Telah di Tutup,\n"+
+          "silahkan coba lagi di hari minggu, Terimakasih.\n"+
+          "Jam Layanan Pendaftaraan Online Hari Minggu Robot PI-Care 08:00 - 12:00 WITA";
+	let hari_kerja = "Mohon Maaf Pendaftaran Layanan Rawat Jalan Pada Hari Ini Telah di Tutup,\n"+
+          "silahkan coba lagi besok hari, Terimakasih.\n"+
+          "Jam Layanan Pendaftaraan Online Hari Kerja Robot PI-Care 08:00 - 15:00 WITA";
+	let tutup = "Mohon Maaf Pendaftaran Layanan Rawat Jalan Tutup,\n"+
+          "silahkan coba lagi besok hari, Terimakasih.\n"+
+          "Jam Layanan Pendaftaraan Online Hari Kerja Robot PI-Care 08:00 - 15:00 WITA";
+	if(day=="Sabtu"){
+		return sabtu
+	}else if(day=="Minggu"){
+		return minggu
+	}else if(day=="Jumat"){
+		return jumat
+	}else if(day=="Tutup"){
+		return tutup
+	}else{
+		return hari_kerja
+	}
+}
+
+function escape(string) {
+  return string.replace(/[^a-zA-Z0-9]/g, '');
+}
+
+
   module.exports = {
     header,
     temp_state_user,
@@ -190,15 +276,20 @@ function getDateToday() {
     info_tambahan2,
     info_tambahan3,
     form_data_diri,
+    berhasil,
+    flag,
+    announcement,
     getBrosur,
     getDateToday,
     getJamLayanan,
+    flagbuka_tutup,
     state_checker,
     timestamp_checker,
     TStoT,
     typeFile,
     removeSpasi,
     combination_check,
+    escape,
   }
 
 //   export let variables = {
