@@ -76,7 +76,7 @@ khanza.post("/cekDataDaftar", (req, res) => {
 });
 
 khanza.post("/getDataPasien", (req, res) => {
-  console.log(req.body)
+  // console.log(req.body)
   let nama = req.body.nama
   let tgl_lahir = req.body.tgl_lahir
   if(nama!=""&&tgl_lahir==""){

@@ -29,6 +29,8 @@
 
     <!-- Custom styles for this page -->
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <!-- tambahan -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 
 <body id="page-top">
@@ -451,7 +453,8 @@
                 </div>
             </div>
         </div>
-
+        
+        <!-- tambahan -->
         <div class="modal fade bd-example-modal-lg" id="modal_data_pasien" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -499,7 +502,7 @@
             </div>
         </div>
 
-        <div class="modal fade bd-example-modal-sm" id="modalBookingBaru" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade bd-example-modal-sm" id="modalBookingBaru" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-sm" role="document">
                 <div class="modal-content">
                 <div class="modal-header ">
@@ -540,7 +543,7 @@
         </div>
 
 
-        <div class="modal fade bd-example-modal-md" id="modalBookingLama" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade bd-example-modal-md" id="modalBookingLama" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-md" role="document">
                 <div class="modal-content">
                 <div class="modal-header ">
@@ -623,10 +626,16 @@
     <!-- Page level plugins -->
     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
+    
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
+    <!-- tambahan -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
+        // tambahan
+        $(document).ready(function() {
+            $('.select-modify').select2();
+        });
     function TStoD(){
         let timeStamp= Date.now()
         let now= new Date(timeStamp);
@@ -657,15 +666,19 @@
         return date;
     }
     function dateSet(param) {
-        const today = new Date(param)
-        const now = new Date(today)
-        now.setDate(now.getDate() + 1)
-        let date =
-            now.getFullYear()+ "-" +
-            ("0" + now.getMonth() + 1).slice(-2) +
-            "-" +
-            ("0" + now.getDate()).slice(-2);
-        return date;
+        if(param!=""){
+            const today = new Date(param)
+            const now = new Date(today)
+            now.setDate(now.getDate() + 1)
+            let date =
+                now.getFullYear()+ "-" +
+                ("0" + now.getMonth() + 1).slice(-2) +
+                "-" +
+                ("0" + now.getDate()).slice(-2);
+            return date;
+        }else{
+            return param;
+        }
     }
     function clear(params) {
         let next = $(params+' .modal-body').find('.form-group').find('.form-control')
@@ -798,6 +811,11 @@
                         "<option value='"+ele.kd_poli+"'>"+ele.nm_poli+"</option>"
                         +"")
                     });
+                    // tambahan
+                    if(!$("#poli_tujuan_booking").hasClass("select-modify")){
+                        $("#poli_tujuan_booking").addClass("select-modify")
+                        $("#poli_tujuan_booking").select2({ width: '100%' })
+                    }
                 }
             });
             $.post('conf/api-serv.php',{getDataRow:$(this).attr('data-id')}, function(data){
@@ -817,6 +835,7 @@
                 success: function (data) {
                     // fungsi setbookinglama
                     $("#poli_booking_registrasi").html("")
+                    let data_new = []
                     data.poli.forEach(ele => {
                         $("#poli_booking_registrasi").append(""+
                         "<option value='"+ele.kd_poli+"'>"+ele.nm_poli+"</option>"
@@ -834,6 +853,20 @@
                         "<option value='"+ele.kd_pj+"'>"+ele.png_jawab+"</option>"
                         +"")
                     });
+
+                    // tambahan
+                    if(!$("#poli_booking_registrasi").hasClass("select-modify")){
+                        $("#poli_booking_registrasi").addClass("select-modify")
+                        $("#poli_booking_registrasi").select2({ width: '100%' })
+                    }
+                    if(!$("#dokter_booking_registrasi").hasClass("select-modify")){
+                        $("#dokter_booking_registrasi").addClass("select-modify")
+                        $("#dokter_booking_registrasi").select2({ width: '100%' })
+                    }
+                    if(!$("#penjamin").hasClass("select-modify")){
+                        $("#penjamin").addClass("select-modify")
+                        $("#penjamin").select2({ width: '100%' })
+                    }
                 }
             });
             $("#tgl_booking_lama").val($(this).attr('data-tanggal'))
