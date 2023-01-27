@@ -186,7 +186,7 @@ khanza.get("/getPoliDokter", (req, res) => {
 const client = new Client({
   authStrategy: new LocalAuth(),
   puppeteer: {
-    executablePath: 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
+    executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
   }
   // puppeteer: {
   //   executablePath: "/opt/google/chrome/google-chrome",

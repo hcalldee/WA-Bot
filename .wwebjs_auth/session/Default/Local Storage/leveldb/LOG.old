@@ -1,3 +1,2 @@
-2023/01/16-09:51:45.472 1240 Reusing MANIFEST C:\xampp\htdocs\WA-Bot\.wwebjs_auth\session\Default\Local Storage\leveldb/MANIFEST-000001
-2023/01/16-09:51:45.472 1240 Recovering log #4
-2023/01/16-09:51:45.472 1240 Reusing old log C:\xampp\htdocs\WA-Bot\.wwebjs_auth\session\Default\Local Storage\leveldb/000004.log 
+2023/01/24-14:32:17.668 1b38 Creating DB C:\xampp\htdocs\WA-Bot\.wwebjs_auth\session\Default\Local Storage\leveldb since it was missing.
+2023/01/24-14:32:17.692 1b38 Reusing MANIFEST C:\xampp\htdocs\WA-Bot\.wwebjs_auth\session\Default\Local Storage\leveldb/MANIFEST-000001
