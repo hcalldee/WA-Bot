@@ -1,6 +1,7 @@
 <?php
 require_once('../conf/conn.php');
 require_once('../conf/model.php');
+require_once('../vendor/decrypt.php');
 
 
 // ekopre($_POST);
@@ -22,5 +23,10 @@ if(isset($_POST['getDataRow'])){
 } else if(isset($_POST['getDataTanggal'])){
     $keyword  = trim(isset($_POST['getDataTanggal']))?trim($_POST['getDataTanggal']):NULL;
     echo json_encode(getDataByTgl($keyword));
+}
+
+if(isset($_POST['getRujukan'])){
+    $keyword  = trim(isset($_POST['getRujukan']))?trim($_POST['getRujukan']):NULL;
+    echo getRujukan($keyword);
 }
 ?>

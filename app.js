@@ -21,6 +21,9 @@ const khanza = express();
 
 const wa_port = 8081;
 const khanza_port = 8082;
+wa.use(cors({
+  origin: '*'
+}));
 wa.use(bp.json())
 wa.use(bp.urlencoded({ extended: true }))
 
@@ -73,6 +76,18 @@ khanza.post("/cekDataDaftar", (req, res) => {
           res.json(rows);
         }
     });
+});
+
+khanza.post("/filterJadwalDokter", (req, res) => {
+  let poli = req.body.kd_poli
+  let hari = api_utils.besok_hari_apa()
+  dbm_api.connection.query("SELECT * FROM jadwal_poli where kd_poli = '"+poli+"' and hari_kerja = '"+hari+"';", function(err, rows) {
+      if (err){
+          throw err;
+      }else{
+        res.json(rows).status(200);
+      }
+  });
 });
 
 khanza.post("/getDataPasien", (req, res) => {
@@ -182,6 +197,18 @@ khanza.get("/getPoliDokter", (req, res) => {
     });
 });
 
+khanza.get("/getJadwalBesok", (req, res) => {
+    // let hari = req.body.hari_besok
+    let hari = api_utils.besok_hari_apa()
+    dbm_api.connection.query("SELECT * FROM `jadwal_poli` where hari_kerja = '"+hari+"';", function(err, rows, fields) {
+        if (err){
+            throw err;
+        }else{
+          res.json(rows).status(200);
+        }
+    });
+});
+
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -192,9 +219,8 @@ const client = new Client({
   //   executablePath: "/opt/google/chrome/google-chrome",
   // }
 });
-// const client = new Client();
 
-client.initialize();
+// client.initialize();
 
 client.on('qr', (qr) => {
   qrcode.generate(qr, { small: true });
@@ -219,9 +245,19 @@ wa.post('/sendToClient', (req, res) => {
   );
 });
 
-client.on('ready', () => {
+wa.get('/getPresetPesan', (req, res) => {
+  dbm.connection.query("SELECT * FROM `preset_pesan` where tipe like '%pesan pembatalan%';", function(err, rows) {
+    if (err){
+        throw err;
+    }else{
+        res.json(rows).status(200);
+    }
+  });
+});
+
+// client.on('ready', () => {
   
-  console.log('Client is ready!');
+//   console.log('Client is ready!');
   wa.listen(wa_port, () => {
     console.log(`whatsapp-bot listening at http://localhost:${wa_port}`)
   });
@@ -229,8 +265,8 @@ client.on('ready', () => {
     console.log(`khanza_api listening at http://localhost:${khanza_port}`)
   });
   
-  // console.time('Services start');
-});
+//   // console.time('Services start');
+// });
 
 client.on('message', async (message) => {
   // delayer

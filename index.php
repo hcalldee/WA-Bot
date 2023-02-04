@@ -1,10 +1,10 @@
 <?php
-// tambahan
     include './conf/conn.php';
-    $sql = "SELECT id_daftar, Nama, NIK ,Alamat, Jenis_Bayar, Poli_tujuan, KartuAsuransi, KartuRSPI, KTP, is_verified as status_pasien,  date(insert_at) as tanggal, time(insert_at) as waktu ,insert_at, date(curdate()+1) as tanggal_layanan, no_wa FROM `daftar_pasien` having tanggal = (SELECT curdate()) or tanggal = (SELECT curdate()+1) ORDER BY insert_at asc;";
+    $sql = "SELECT id_daftar, Nama, NIK ,Alamat, Jenis_Bayar, Poli_tujuan, KartuAsuransi, KartuRSPI, KTP, is_verified as status_pasien,  date(insert_at) as tanggal, time(insert_at) as waktu ,insert_at, date(curdate()) as tanggal_layanan, no_wa FROM `daftar_pasien` having tanggal = (SELECT curdate()) or tanggal = (SELECT curdate()+1) ORDER BY insert_at asc;";
     // $sql = "SELECT * FROM daftar_pasien";
     $_SESSION['data_pendaftar'] = sqlFetch(dbcon()->query($sql));
     $dp =  $_SESSION['data_pendaftar'];
+    // ekopre($dp);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,7 +29,6 @@
 
     <!-- Custom styles for this page -->
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <!-- tambahan -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 
@@ -60,10 +59,19 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="modal" data-target="#modal_data_pasien" id="cek_pasien_lama" href="#">
-                    <i class="fas fa-fw fa-list-alt"></i>
+                    <i class="fas fa-fw fa-user"></i>
                     <span>Cek Pasien Lama</span></a>
             </li>
-            
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="modal" data-target="#modal_Vclaim" href="#">
+                    <i class="fas fa-fw fa-credit-card"></i>
+                    <span>Cek Rujukan VClaim BPJS</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="modal" data-target="#modal_jadwal_dokter" href="#" id="cek_jadwal">
+                    <i class="fas fa-fw fa-credit-card"></i>
+                    <span>Jadwal Poliklinik & Dokter</span></a>
+            </li>
 
         </ul>
         <!-- End of Sidebar -->
@@ -167,7 +175,6 @@
                                     </thead>
                                     <tbody>
                                         <?php
-                                        // ekopre($data);
                                         $i=1;
                                         foreach ($dp as $data) {
                                         ?>
@@ -178,7 +185,6 @@
                                                 <td><?=explode('_',$data['Poli_tujuan'])[0]?></td>
                                                 <td><?=explode('_',$data['Poli_tujuan'])[1]?></td>
                                                 <td><?=$data['waktu']?></td>
-                                                <!-- tambahan -->
                                                 <td><?php
                                                 if($data['status_pasien']==0){  
                                                     echo "<span class='badge badge-danger'>Belum Verifikasi</span>";
@@ -429,7 +435,7 @@
             </div>
         </div>
 
-        <div class="modal fade bd-example-modal-lg" id="modalBatal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade bd-example-modal-lg" id="modalBatal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                 <div class="modal-header ">
@@ -439,6 +445,11 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Pesan Preset</label>
+                            <select class="form-control" id="pesan_preset">
+                            </select>
+                    </div>
 
                     <div class="form-group">
                         <label for="exampleFormControlTextarea1">Pesan Tambahan</label>
@@ -447,14 +458,54 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="btn_batal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="btn_batal">Tolak Pendaftaran</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
                 </div>
             </div>
         </div>
-        
-        <!-- tambahan -->
+
+        <div class="modal fade bd-example-modal-sm" id="modalBookingBaru" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                <div class="modal-header ">
+                    <h5 class="modal-title" id="exampleModalLabel">Poli Tujuan Pasien</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Pilih Poli Tujuan Pasien</label>
+                            <select class="form-control" id="poli_tujuan_booking">
+                            </select>
+                    </div>
+                    <div class="form-group" disabled hidden>
+                        <textarea class="form-control" id="alamat_booking" rows="3"></textarea>
+                    </div>
+                    <div class="form-group" disabled hidden>
+                        <input type="text" class="form-control" id="no_booking">
+                    </div>
+                    <div class="form-group" disabled hidden>
+                        <input type="text" class="form-control" id="nama_booking">
+                    </div>
+                    <div class="form-group" disabled hidden>
+                        <input type="text" class="form-control" id="tgl_booking">
+                    </div>
+                    <!-- STTS -->
+                    <!-- TGL_BOOKING TIMESTAMP -->
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btn_booking">Booking</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- data pasien -->
         <div class="modal fade bd-example-modal-lg" id="modal_data_pasien" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -502,46 +553,97 @@
             </div>
         </div>
 
-        <div class="modal fade bd-example-modal-sm" id="modalBookingBaru" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-sm" role="document">
+        <div class="modal fade bd-example-modal-lg" id="modal_Vclaim" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                 <div class="modal-header ">
-                    <h5 class="modal-title" id="exampleModalLabel">Poli Tujuan Pasien</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Cek Rujukan Vclaim BPJS</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">No BPJS</label>
+                                <input type="text" class="form-control" id="nomor_bpjs" placeholder="Nomor Peserta BPJS">
+                            </div>
+                        </div>
+                        <h6 class="col-md-12">Data Rujukan Vclaim BPJS</h6>
 
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect1">Pilih Poli Tujuan Pasien</label>
-                            <select class="form-control" id="poli_tujuan_booking">
-                            </select>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">No RM</label>
+                                <input type="text" class="form-control" placeholder="nomor rujukan" disabled id="mr_vclaim">
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">No Rujukan</label>
+                                <input type="text" class="form-control" placeholder="nomor rujukan" disabled id="no_rujukan_vclaim">
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">Tanggal Rujukan</label>
+                                <input type="text" class="form-control" placeholder="tanggal rujukan" disabled id="tgl_rujukan_vclaim">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">Status</label>
+                                <input type="text" class="form-control" placeholder="status peserta" disabled id="status_vclaim">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">Nama</label>
+                                <input type="text" class="form-control" placeholder="nama peserta" disabled id="nama_vclaim">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">Kelas</label>
+                                <input type="text" class="form-control" placeholder="kelas peserta" disabled id="kelas_vclaim">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">Jenis</label>
+                                <input type="text" class="form-control" placeholder="jenis peserta" disabled id="jenis_vclaim">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">Faskes Perujuk</label>
+                                <input type="text" class="form-control" placeholder="faskes perujuk" disabled id="faskes_vclaim">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">Poli Tujuan</label>
+                                <input type="text" class="form-control" placeholder="poli tujuan" disabled id="poli_vclaim">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">Diagnosa</label>
+                                <input type="text" class="form-control" placeholder="diagnosa" disabled id="diagnosa_vclaim">
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group" disabled hidden>
-                        <textarea class="form-control" id="alamat_booking" rows="3"></textarea>
-                    </div>
-                    <div class="form-group" disabled hidden>
-                        <input type="text" class="form-control" id="no_booking">
-                    </div>
-                    <div class="form-group" disabled hidden>
-                        <input type="text" class="form-control" id="nama_booking">
-                    </div>
-                    <div class="form-group" disabled hidden>
-                        <input type="text" class="form-control" id="tgl_booking">
-                    </div>
-                    <!-- STTS -->
-                    <!-- TGL_BOOKING TIMESTAMP -->
-                    
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="btn_booking">Booking</button>
+                    <button type="button" class="btn btn-primary" id="cari_rujukan">Cari</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
                 </div>
             </div>
         </div>
-
 
         <div class="modal fade bd-example-modal-md" id="modalBookingLama" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-md" role="document">
@@ -602,6 +704,39 @@
             </div>
         </div>
 
+        <div class="modal fade bd-example-modal-lg" id="modal_jadwal_dokter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                <div class="modal-header ">
+                    <h5 class="modal-title" id="exampleModalLabel">Jadwal Dokter Besok</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                <h6 class="modal-title" id="exampleModalLabel">Tabel Jadwal Dokter</h6>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="tableJadwalDokter" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th style="width:20%">Hari</th>
+                                    <th style="width:60%">Poli</th>
+                                    <th style="width:20%">Dokter</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btn_cari">Cari</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
         </div>
         <!-- End of Content Wrapper -->
 
@@ -626,12 +761,16 @@
     <!-- Page level plugins -->
     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-    
+
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
-    <!-- tambahan -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
+
+    function escape(string) {
+        return string.replace(/[^a-zA-Z0-9\s.,]/g, '');
+    }
+
         // tambahan
         $(document).ready(function() {
             $('.select-modify').select2();
@@ -650,9 +789,23 @@
         let date =
             now.getFullYear() +
             "-" +
-            ("0" + now.getMonth() + 1).slice(-2) +
+            ("0" + (parseInt(now.getMonth()) + 1).toString()).slice(-2) +
             "-" +
             ("0" + now.getDate()).slice(-2);
+        return date;
+    }
+    function getTomorow() {
+        const today = new Date()
+        let tomorrow =  new Date()
+        let timeStamp = Date.now();
+        let now = new Date(timeStamp);
+        tomorrow.setDate(today.getDate() + 1)
+        let date =
+            tomorrow.getFullYear() +
+            "-" +
+            ("0" + (parseInt(tomorrow.getMonth()) + 1).toString()).slice(-2) +
+            "-" +
+            ("0" + tomorrow.getDate()).slice(-2);
         return date;
     }
     function HumanDate(param) {
@@ -660,25 +813,10 @@
         let date =
             ("0" + now.getDate()).slice(-2) +
             "/" +
-            ("0" + now.getMonth() + 1).slice(-2) +
+            ("0" + (parseInt(now.getMonth()) + 1).toString()).slice(-2) +
             "/" +
             now.getFullYear();
         return date;
-    }
-    function dateSet(param) {
-        if(param!=""){
-            const today = new Date(param)
-            const now = new Date(today)
-            now.setDate(now.getDate() + 1)
-            let date =
-                now.getFullYear()+ "-" +
-                ("0" + now.getMonth() + 1).slice(-2) +
-                "-" +
-                ("0" + now.getDate()).slice(-2);
-            return date;
-        }else{
-            return param;
-        }
     }
     function clear(params) {
         let next = $(params+' .modal-body').find('.form-group').find('.form-control')
@@ -690,13 +828,28 @@
         });
         $(params).modal('toggle')
     }
+    function dateSet(param) {
+        if(param!=""){
+            const today = new Date(param)
+            const now = new Date(today)
+            now.setDate(now.getDate() + 1)
+            let date =
+                now.getFullYear()+ "-" +
+                ("0" + (parseInt(tomorrow.getMonth()) + 1).toString()).slice(-2) +
+                "-" +
+                ("0" + now.getDate()).slice(-2);
+            return date;
+        }else{
+            return param;
+        }
+    }
     function buttonPreserve(data) {
         let tgl_layanan = new Date(data.insert_at.split(' ')[0]);
         tgl_layanan.setDate(tgl_layanan.getDate() + 1);
         let tgl = 
             tgl_layanan.getFullYear() +
             "-" +
-            ("0" + tgl_layanan.getMonth() + 1).slice(-2) +
+            ("0" + (parseInt(tgl_layanan.getMonth()) + 1).toString()) +
             "-" +
             ("0" + tgl_layanan.getDate()).slice(-2);
 
@@ -717,53 +870,71 @@
         return btn
     }
     
-    // tambahan
     $("#filter_tgl").change(function () {
-        $.post('conf/api-serv.php',{getDataTanggal:$(this).val()}, function(data){
+    $.post('conf/api-serv.php',{getDataTanggal:$(this).val()}, function(data){
+        data = JSON.parse(data)
+        let counter = 1;
+        if(data.length>0){
+            let myTable = $('#dataTable').DataTable()
+            let flagver
+            myTable.clear().draw()
+            data.forEach(ele => {
+                // console.log(buttonPreserve(ele))
+                if(ele.is_verified==0){
+                   flagver = "<span class='badge badge-danger'>Belum di Verifikasi</span>"
+                }else if(ele.is_verified==2){
+                    flagver = "<span class='badge badge-success'>Terverifikasi</span>"
+                }
+                myTable.row.add([
+                    counter, 
+                    ele.Nama, 
+                    ele.Jenis_Bayar, 
+                    ele.Poli_tujuan.split('_')[0], 
+                    ele.Poli_tujuan.split('_')[1], 
+                    ele.insert_at.split(' ')[1],
+                    flagver,
+                    buttonPreserve(ele)
+                ]).draw();
+                counter++;
+            });
+            // console.log(data)
+        }else{
+            alert("data tidak ditemukan")
+            $('#dataTable').DataTable().clear().draw()
+            // console.log("tidak ada data")
+        }
+    });
+})
+
+$("#cari_rujukan").click(function () {
+        $.post('conf/api-serv.php',{getRujukan:$("#nomor_bpjs").val()}, function(data){
             data = JSON.parse(data)
-            let counter = 1;
-            if(data.length>0){
-                let myTable = $('#dataTable').DataTable()
-                let flagver
-                myTable.clear().draw()
-                data.forEach(ele => {
-                    // console.log(buttonPreserve(ele))
-                    if(ele.is_verified==0){
-                       flagver = "<span class='badge badge-danger'>Belum di Verifikasi</span>"
-                    }else if(ele.is_verified==2){
-                        flagver = "<span class='badge badge-success'>Terverifikasi</span>"
-                    }
-                    myTable.row.add([
-                        counter, 
-                        ele.Nama, 
-                        ele.Jenis_Bayar, 
-                        ele.Poli_tujuan.split('_')[0], 
-                        ele.Poli_tujuan.split('_')[1], 
-                        ele.insert_at.split(' ')[1],
-                        flagver,
-                        buttonPreserve(ele)
-                    ]).draw();
-                    counter++;
-                });
-                // console.log(data)
-            }else{
-                alert("data tidak ditemukan")
-                $('#dataTable').DataTable().clear().draw()
-                // console.log("tidak ada data")
-            }
+            console.log(data)
+            $("#no_rujukan_vclaim").val(data.rujukan.noKunjungan) 
+            $("#tgl_rujukan_vclaim").val(data.rujukan.tglKunjungan)
+            $("#status_vclaim").val(data.rujukan.peserta.statusPeserta.keterangan)
+            $("#nama_vclaim").val(data.rujukan.peserta.nama)
+            $("#kelas_vclaim").val(data.rujukan.peserta.hakKelas.keterangan)
+            $("#jenis_vclaim").val(data.rujukan.peserta.jenisPeserta.keterangan)
+            $("#faskes_vclaim").val(data.rujukan.provPerujuk.nama)
+            $("#poli_vclaim").val(data.rujukan.poliRujukan.nama)
+            $("#diagnosa_vclaim").val(data.rujukan.diagnosa.nama)
+            $("#mr_vclaim").val(data.rujukan.peserta.mr.noMR)
+
+            // $("#data_retrive").val(isi)
         });
     })
 
-    $('#btn_cari').click(function () {
+$('#btn_cari').click(function () {
         if($('#cari_nama_pasien').val()==""&&$('#cari_tanggal_pasien').val()==""){
             alert('silahkan isi nama atau tanggal lahir pasien')
         }else{
             $.ajax({
                 type: "POST",
                 url: "http://192.168.1.200:8082/getDataPasien/",
-                // url: "http://192.168.1.4:8082/getPoli/",
+                // url: "http://192.168.1.4:8082/getDataPasien/",
                 data:{
-                    nama:$('#cari_nama_pasien').val(),
+                    nama:escape($('#cari_nama_pasien').val()) ,
                     tgl_lahir:dateSet($('#cari_tanggal_pasien').val())
                 },
                 dataType: "JSON",
@@ -811,7 +982,6 @@
                         "<option value='"+ele.kd_poli+"'>"+ele.nm_poli+"</option>"
                         +"")
                     });
-                    // tambahan
                     if(!$("#poli_tujuan_booking").hasClass("select-modify")){
                         $("#poli_tujuan_booking").addClass("select-modify")
                         $("#poli_tujuan_booking").select2({ width: '100%' })
@@ -821,7 +991,7 @@
             $.post('conf/api-serv.php',{getDataRow:$(this).attr('data-id')}, function(data){
                 $("#alamat_booking").val(JSON.parse(data)[0].Alamat)
             });
-            $("#tgl_booking").val($(this).attr('data-tanggal'))
+            $("#tgl_booking").val(getTomorow())
             $("#nama_booking").val($(this).attr('data-nama'))
             $("#no_booking").val($(this).attr('data-no'))
         })
@@ -835,7 +1005,6 @@
                 success: function (data) {
                     // fungsi setbookinglama
                     $("#poli_booking_registrasi").html("")
-                    let data_new = []
                     data.poli.forEach(ele => {
                         $("#poli_booking_registrasi").append(""+
                         "<option value='"+ele.kd_poli+"'>"+ele.nm_poli+"</option>"
@@ -853,8 +1022,6 @@
                         "<option value='"+ele.kd_pj+"'>"+ele.png_jawab+"</option>"
                         +"")
                     });
-
-                    // tambahan
                     if(!$("#poli_booking_registrasi").hasClass("select-modify")){
                         $("#poli_booking_registrasi").addClass("select-modify")
                         $("#poli_booking_registrasi").select2({ width: '100%' })
@@ -869,7 +1036,7 @@
                     }
                 }
             });
-            $("#tgl_booking_lama").val($(this).attr('data-tanggal'))
+            $("#tgl_booking_lama").val(getTomorow())
         })
 
         $("#btn_booking_lama").click(function () {
@@ -884,6 +1051,7 @@
             "waktu_kunjungan":TStoDT()+" "+TStoD()
 
         }
+        // console.log(data_kirim)
         alert("Data Sudah Dikirim")
         clear('#modalBookingLama')
 
@@ -900,6 +1068,32 @@
         });
     })
 
+    $("#poli_booking_registrasi").change(function () {
+        let polsel = $(this).find(":selected").val() 
+        let poli = $(this).find(":selected").text() 
+        $.ajax({
+            type: "POST",
+            url: "http://192.168.1.200:8082/filterJadwalDokter/",
+            // url: "http://192.168.1.4:8082/daftarBaruPasienLama/",
+            data:{
+                kd_poli:polsel
+            },
+            dataType: "JSON",
+            success: function (data) {
+                if (data.length>0) {
+                    $("#dokter_booking_registrasi").html("")
+                        data.forEach(ele => {
+                            $("#dokter_booking_registrasi").append(""+
+                            "<option value='"+ele.kd_dokter+"'>"+ele.nm_dokter+"</option>"
+                            +"")
+                    });
+                }else{
+                    alert("mohon maaf tidak ada jadwal "+poli+" pada besok hari")
+                }
+            }
+        });
+    })
+
         $("#btn_booking").click(function () {
             let data_kirim = {
                 "tanggal":$("#tgl_booking").val(),
@@ -910,7 +1104,7 @@
                 "tanggal_booking":$("#tgl_booking").val()+" "+TStoD()
             }
             alert("Data Sudah Dikirim")
-            clear('#modalBooking')
+            clear('#modalBookingBaru')
 
             $.ajax({
                 type: "POST",
@@ -967,7 +1161,10 @@
         
         $("#dataTable").on('click','.setVerifikasi',function () {
             $('#Nama_pendaftar').val($(this).attr('data-nama'))
-            $('#tanggal_layanan').val($(this).attr('data-tanggal'))
+            $('#tanggal_layanan').val(
+                getTomorow()
+                // $(this).attr('data-tanggal')
+                )
             $('#poli_tujuan').val($(this).attr('data-poli'))
             $('#data-jenis').val($(this).attr('data-jenis'))
             $('#btn_verifikasi').attr('data-id',$(this).attr('data-id'))
@@ -1038,7 +1235,8 @@
             "Pendaftaran di hari "+$('#poli_tujuan').val().split('_')[1]+" tanggal "+HumanDate($('#tanggal_layanan').val())+" berhasil dilakukan\n"+
             "Nomor Antrian Anda : "+$('#no_antrian').val()+"\n"+
             "Silahkan datang pada Jam : "+$('#jam_layanan').val().split(':')[0]+':'+$('#jam_layanan').val().split(':')[1]+" WITA \n"+
-            "di Poli : "+$('#poli_tujuan').val().split('_')[0]+' '+$('#poli_tujuan').val().split('_')[2]+"\n"+
+            "di Poli : "+$('#poli_tujuan').val().split('_')[0]+"\n"+
+			"Dokter : "+$('#poli_tujuan').val().split('_')[2]+"\n"+
             "di Mohon untuk datang 5 menit lebih awal dan langsung menuju Ruangan";
                 
             $.post('conf/api-serv.php',{setVerifikasi:$(this).attr('data-id')}, function(data){
@@ -1069,7 +1267,38 @@
             $('#btn_batal').attr('data-tanggal',$(this).attr('data-tanggal'))
             $('#btn_batal').attr('data-id',$(this).attr('data-id'))
             $('#btn_batal').attr('data-no',$(this).attr('data-no'))
+
+            // pesan_preset     
+            
+
+            $.ajax({
+                type: "GET",
+                url: "http://192.168.1.200:8081/getPresetPesan/",
+                dataType: "JSON",
+                success: function name(data) {
+                    $("#pesan_preset").html("")
+                    $("#pesan_preset").append(""+
+                        "<option>Pilih Pesan Preset</option>"
+                        +"")
+                    data.forEach(ele => {
+                        $("#pesan_preset").append(""+
+                        "<option data-text='"+ele.preset_pesan+"'>"+ele.tipe+"</option>"
+                        +"")
+                    });
+                    if(!$("#pesan_preset").hasClass("select-modify")){
+                        $("#pesan_preset").addClass("select-modify")
+                        $("#pesan_preset").select2({ width: '100%' })
+                    }
+                }
+            });
         })
+
+        $("#pesan_preset").change(function () {
+            $('#pesan_batal').val("")
+            $('#pesan_batal').val($(this).find(":selected").attr('data-text'))
+            
+        })
+
 
         $('#btn_batal').click(function (params) {
             let no_wa = $(this).attr('data-no')
@@ -1111,7 +1340,39 @@
             });
         })
 
-        
+
+    $('#cek_jadwal').click(function (params) {
+        $.ajax({
+            type: "GET",
+            url: "http://192.168.1.200:8082/getJadwalBesok",
+            // url: "http://192.168.1.4:8081/sendToClient",
+            dataType: "JSON",
+            success: function name(data) {
+                if(data.length>0){
+                        //fungsi penyelamat
+                        $("#tableJadwalDokter").dataTable().fnDestroy();
+                        let tablejadwal = $('#tableJadwalDokter').DataTable(
+                                {
+                                    pageLength : 5,
+                                    lengthMenu: [[5], [5]]
+                                }
+                            )
+                        tablejadwal.clear().draw()
+                        data.forEach(ele => {
+                            tablejadwal.row.add([
+                                ele.hari_kerja, 
+                                ele.nm_poli, 
+                                ele.nm_dokter
+                            ]).draw();
+                        });
+                    }else{
+                        alert("data tidak ditemukan")
+                        $('#tableJadwalDokter').DataTable().clear().draw()
+                    }
+                // console.log(data)
+            }
+        });
+    })
 
     </script>
 </body>

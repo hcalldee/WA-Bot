@@ -13,7 +13,8 @@ let string_menu=
 "1. Informasi Pengisian Form Pendaftaran Rawat Jalan\n"+
 "2. Daftar Rawat Jalan\n"+
 "3. List Kata Kunci WA Robot\n"+
-"0. Kembali";
+"4. Jadwal Dokter\n"+
+"5. Pengumuman Perubahan Jadwal";
 
 let announcement=
 "PENGUMUMAN\n"+
@@ -45,10 +46,13 @@ let berhasil =
 "Asuransi\n KTP, Kartu Asuransi, Kartu Berobat *jika Memiliki, Surat Rujukan, Surat Kontrol *jika Kontrol";
 
 let flag = 
+"*LAYANAN PI-CARE HANYA UNTUK LAYANAN SATU HARI SETELAH PENDAFTARAN*\n"+
+"*UNTUK PENDAFTARAN DIHARI YANG SAMA SILAHKAN DAFTAR LANGSUNG DI RUMAH SAKIT*\n\n"+
 "Jadwal Layanan PI-Care \n"+
 "Minggu - Jumat, 08:00-15:00\n"+
-"Sabtu dan H-1 Hari Libur (tanggal merah) Tutup\n"+
-"Pendaftaran di Hari Minggu atau Hari Libur akan dikonfirmasi Admin pada hari kerja";
+"Sabtu dan H-1 Hari Libur (tanggal merah) Tutup\n\n"+
+"Pendaftaran di Hari Minggu atau Hari Libur akan dikonfirmasi Admin pada hari kerja\n"+
+"Pendaftaran di Hari kerja akan di konfirmasi pada jam 03:00 siang setelah pendaftaran PI-Care ditutup silahkan ditunggu. Terimakasih";
 
 var temp_data_user = []
 var temp_state_user = []
@@ -179,7 +183,17 @@ function getDateToday() {
       console.log("parameter kosong");
     }
   }
-
+  let cth = 
+  "Form Pendaftaran Pasien\n"+
+  "Nama : Muhammad Fulan \n"+
+  "NIK  : 0123456789101112 \n"+
+  "Alamat  : Jl.Bumi \n"+
+  "Jenis Bayar : Umum \n"+
+  "Poli Tujuan : Penyakit Dalam \n"+
+  "Dokter Tujuan : dr Fulan \n"+
+  "Nama Penanggung Jawab : Ahmad Fulan \n"+
+  "Nama Ibu Kandung : Siti Fulan \n"+
+  "No Telp Penanggung Jawab : 0812345678"
 //   exports.temp_data_user = temp_data_user
 
 function getJamLayanan() {
@@ -260,7 +274,7 @@ function flagbuka_tutup(){
 }
 
 function escape(string) {
-  return string.replace(/[^a-zA-Z0-9]/g, '');
+  return string.replace(/[^a-zA-Z0-9\s.,]/g, '');
 }
 
 
@@ -279,6 +293,7 @@ function escape(string) {
     berhasil,
     flag,
     announcement,
+    cth,
     getBrosur,
     getDateToday,
     getJamLayanan,

@@ -1,0 +1,4 @@
+create view jadwal_poli as SELECT a.kd_poli, a.kuota, a.hari_kerja, a.jam_mulai, b.nm_dokter,c.nm_poli FROM `jadwal` as a 
+join dokter as b on b.kd_dokter = a.kd_dokter
+join poliklinik as c on c.kd_poli = a.kd_poli  
+ORDER BY `a`.`hari_kerja` ASC
