@@ -7,9 +7,9 @@ include 'LZContext.php';
 
 function getRujukan($var)
 {
-    $consid = "25158";
-    $secretKey = "8xB4352BE3";
-    $userKey = "a045700a9c0df3d9516445104318c942";
+    $consid = "";
+    $secretKey = "";
+    $userKey = "";
     date_default_timezone_set('UTC');
     $tStamp = strval(time()-strtotime('1970-01-01
     00:00:00'));
