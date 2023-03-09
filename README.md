@@ -1,5 +1,9 @@
 # WA-Bot
 
+*jika anda mengalami kesulitan feel free to contact me at
+
+![Twitter URL](https://img.shields.io/twitter/url?label=%40cimolgemay&style=social&url=https%3A%2F%2Ftwitter.com%2Fcimolgemay)
+
 <h3>Requirement</h3>
 <table class="table">
   <thead>
