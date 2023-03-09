@@ -1,6 +1,6 @@
 # WA-Bot
 
-<h3>requirement</h3>
+<h3>Requirement</h3>
 <table class="table">
   <thead>
     <tr>
@@ -64,4 +64,25 @@
    
   kemudian scan qr menggunakan whatsapp yang ada pada android
   
+<h3>Configurasi Hardcode</h3>
 
+1. konfigurasi variabel ada pada dokumen
+   ```sh
+   bot_env/utils/raw_function.js
+   ```    
+   
+2. konfigurasi db pendaftaran_pasien ada pada dokumen
+   ```sh
+   bot_env/db.js
+   ```    
+
+3. konfigurasi db sik ada pada dokumen
+   ```sh
+   api_env/db.js
+   ```    
+   
+4. configurasi port ada pada dokumen 
+   ```sh
+   app.js
+   ```    
+*note 8081 untuk env bot, 8082 untk api simrs khanza / mlite
