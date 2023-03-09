@@ -42,17 +42,26 @@
 </table>
 
 <h3>Cara Instalasi</h3>
-<p>
-  1. Pastikan Node Js, npm, dan aplikasi xampp/lampp/mampp sudah terinstal<br>
-  2. buat database pendaftaran_pasien menggunakan import query dari folder assets/db/pendaftaran_pasien.sql<br>
-  3. buka file query pada assets/db/sql_view.sql<br>
-  &nbsp;&nbsp;&nbsp;a. pada database sik (simrs Khanza / Mlite) jalankan query berikut untuk membuat procedure dan view<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;1. jalankan query dibawah comment -- ready view <br>
-  &nbsp;&nbsp;&nbsp;&nbsp;2. jalankan query dibawah comment -- ready datetoday <br>
-  &nbsp;&nbsp;&nbsp;&nbsp;3. jalankan query dibawah comment -- view jadwal poli <br>
-  4. install semua dependency menggunakan command berikut <br>
+
+  1. Pastikan Node Js, npm, dan aplikasi xampp/lampp/mampp sudah terinstal
+  2. buat database pendaftaran_pasien menggunakan import query dari folder assets/db/pendaftaran_pasien.sql
+  3. buka file query pada assets/db/sql_view.sql
+  4. pada database sik (simrs Khanza / Mlite) jalankan query berikut untuk membuat procedure dan view<br>
+  5. jalankan query dibawah comment -- ready view 
+  6. jalankan query dibawah comment -- ready datetoday 
+  7. jalankan query dibawah comment -- view jadwal poli 
+  8. install semua dependency menggunakan command berikut
+  
+   ```sh
    npm i body-parser compress-images express fs-extra gifsicle mysql pngquant-bin qrcode-terminal whatsapp-web.js cors
-  <br>5. gunakan perintah <br>
-    node app.js
-  <br>kemudian scan qr menggunakan whatsapp yang ada pada android
-</p>
+   ```
+   
+  9. gunakan perintah 
+  
+   ```sh
+   node app.js
+   ```    
+   
+  kemudian scan qr menggunakan whatsapp yang ada pada android
+  
+
