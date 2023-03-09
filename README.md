@@ -38,6 +38,9 @@
     <tr>
       <td><a href="https://www.npmjs.com/package/pm2" target="_blank">PM2</a></td>
     </tr>
+    <tr>
+      <td><a href="https://www.npmjs.com/package/cors" target="_blank">CORS</a></td>
+    </tr>
   </tbody>
 </table>
 
