@@ -8,42 +8,29 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">Dependency</th>
+      <th colspan="3" scope="col">Dependency</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><a href="https://nodejs.org/en/" target="_blank">Node JS</a></td>
-    </tr>
-    <tr>
       <td><a href="https://www.npmjs.com/package/body-parser" target="_blank">Body-Parser</a></td>
-    </tr>
-    <tr>
       <td><a href="https://www.npmjs.com/package/compress-images" target="_blank">compress-images</a></td>
     </tr>
     <tr>
       <td><a href="https://www.npmjs.com/package/fs-extra" target="_blank">fs-extra</a></td>
-    </tr>
-    <tr>
       <td><a href="https://www.npmjs.com/package/gifsicle" target="_blank">gifsicle</a></td>
-    </tr>
-    <tr>
       <td><a href="https://www.npmjs.com/package/pngquant-bin" target="_blank">pngquant-bin</a></td>
     </tr>
     <tr>
       <td><a href="https://www.npmjs.com/package/mysql" target="_blank">mysql</a></td>
-    </tr>
-    <tr>
       <td><a href="https://www.npmjs.com/package/whatsapp-web.js" target="_blank">whatsapp-web.js</a></td>
-    </tr>
-    <tr>
       <td><a href="https://www.npmjs.com/package/qrcode-terminal" target="_blank">qrcode-terminal</a></td>
     </tr>
     <tr>
       <td><a href="https://www.npmjs.com/package/pm2" target="_blank">PM2</a></td>
-    </tr>
-    <tr>
       <td><a href="https://www.npmjs.com/package/cors" target="_blank">CORS</a></td>
+      <td><a href="https://www.npmjs.com/package/express" target="_blank">Express</a></td>
     </tr>
   </tbody>
 </table>
