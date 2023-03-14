@@ -126,7 +126,6 @@ where b.status = '1' ORDER BY `a`.`hari_kerja` ASC;
 
 <h3>Screenshoot</h3>
 <h5>PI-Care Dashboard<h5>
-![image](https://user-images.githubusercontent.com/49970186/224895503-28f9a15e-8006-445c-ac3b-37b35a8c056d.png) <br>
+<img src="https://user-images.githubusercontent.com/49970186/224895503-28f9a15e-8006-445c-ac3b-37b35a8c056d.png"><br>
 <h5>Interface WA Bot<h5>
-![image](https://user-images.githubusercontent.com/49970186/224895733-041d9450-ef4c-46de-b8f0-712808c8c42d.png)
-
+<img src="https://user-images.githubusercontent.com/49970186/224895733-041d9450-ef4c-46de-b8f0-712808c8c42d.png"><br>
