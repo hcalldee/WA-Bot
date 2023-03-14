@@ -60,7 +60,7 @@
   8. install semua dependency menggunakan command berikut
   
    ```sh
-   npm i body-parser compress-images express fs-extra gifsicle mysql pngquant-bin@6.0.1 qrcode-terminal whatsapp-web.js cors
+   npm i body-parser compress-images express fs-extra gifsicle@5.3.0 mysql pngquant-bin@6.0.1 qrcode-terminal whatsapp-web.js cors
    ```
    
   9. gunakan perintah 
