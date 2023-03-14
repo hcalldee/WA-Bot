@@ -56,23 +56,23 @@
   4. pada database sik (simrs Khanza / Mlite) jalankan query berikut untuk membuat procedure dan view<br>
   5. jalankan query dibawah comment -- ready view 
   
-     ```sh
-   create view get_verifikasi_wa as SELECT a.no_reg as antrian, a.tgl_registrasi, a.no_rkm_medis , b.nm_poli , c.hari_kerja as hari_layanan , d.nm_dokter FROM `reg_periksa` as a 
- inner join poliklinik as b on a.kd_poli = b.kd_poli
- inner join dokter as d on a.kd_dokter = d.kd_dokter
- inner join jadwal as c on (a.kd_dokter = c.kd_dokter and a.kd_poli = c.kd_poli and c.hari_kerja = dateToDay(a.tgl_registrasi))
-where a.tgl_registrasi >= '2022-12-01';
-   ```
+```sh 
+create view get_verifikasi_wa as SELECT a.no_reg as antrian, a.tgl_registrasi, a.no_rkm_medis , b.nm_poli , c.hari_kerja as hari_layanan , d.nm_dokter FROM   
+reg_periksa as a 
+inner join poliklinik as b on a.kd_poli = b.kd_poli 
+inner join dokter as d on a.kd_dokter = d.kd_dokter 
+inner join jadwal as c on (a.kd_dokter = c.kd_dokter and a.kd_poli = c.kd_poli and c.hari_kerja = dateToDay(a.tgl_registrasi)) 
+where a.tgl_registrasi >= '2022-12-01'
+```
    
   6. jalankan query dibawah comment -- ready datetoday 
-  
-     ```sh
-   DELIMITER $$
-CREATE FUNCTION `dateToDay`(`tanggal` DATE) RETURNS varchar(255) 
-    DETERMINISTIC
-BEGIN
-  DECLARE varhasil varchar(255);
 
+```sh
+DELIMITER $$
+CREATE FUNCTION `dateToDay`(`tanggal` DATE) RETURNS varchar(255) 
+DETERMINISTIC
+BEGIN
+DECLARE varhasil varchar(255);
   SELECT UPPER(
   CONCAT(
     CASE DAYOFWEEK(tanggal)
@@ -83,23 +83,21 @@ BEGIN
       WHEN 5 THEN 'Kamis'
       WHEN 6 THEN 'Jumat'
       WHEN 7 THEN 'Sabtu'
-    END
-  )
+    END)
   ) INTO varhasil;
-
   RETURN varhasil;
 END$$
 DELIMITER ;
-   ```
+```
    
   7. jalankan query dibawah comment -- view jadwal poli 
   
-     ```sh
-  create view jadwal_poli as SELECT a.kd_poli, a.kuota, a.hari_kerja, a.jam_mulai, b.nm_dokter,c.nm_poli FROM `jadwal` as a 
+```sh
+create view jadwal_poli as SELECT a.kd_poli, a.kuota, a.hari_kerja, a.jam_mulai, b.nm_dokter,c.nm_poli FROM `jadwal` as a 
 join dokter as b on b.kd_dokter = a.kd_dokter
-join poliklinik as c on c.kd_poli = a.kd_poli  where b.status = '1'
-ORDER BY `a`.`hari_kerja` ASC;
-   ```
+join poliklinik as c on c.kd_poli = a.kd_poli  
+where b.status = '1' ORDER BY `a`.`hari_kerja` ASC;
+```
    
   8. install semua dependency menggunakan command berikut
   
