@@ -41,18 +41,8 @@
   2. buat database pendaftaran_pasien menggunakan import query dari folder assets/db/pendaftaran_pasien.sql
   3. buka file query pada assets/db/sql_view.sql
   4. pada database sik (simrs Khanza / Mlite) jalankan query berikut untuk membuat procedure dan view<br>
-  5. jalankan query dibawah comment -- ready view 
-  
-```sh 
-create view get_verifikasi_wa as SELECT a.no_reg as antrian, a.tgl_registrasi, a.no_rkm_medis , b.nm_poli , c.hari_kerja as hari_layanan , d.nm_dokter FROM   
-reg_periksa as a 
-inner join poliklinik as b on a.kd_poli = b.kd_poli 
-inner join dokter as d on a.kd_dokter = d.kd_dokter 
-inner join jadwal as c on (a.kd_dokter = c.kd_dokter and a.kd_poli = c.kd_poli and c.hari_kerja = dateToDay(a.tgl_registrasi)) 
-where a.tgl_registrasi >= '2022-12-01'
-```
-   
-  6. jalankan query dibawah comment -- ready datetoday 
+
+  5. jalankan query dibawah comment -- ready datetoday 
 
 ```sh
 DELIMITER $$
@@ -75,6 +65,17 @@ DECLARE varhasil varchar(255);
   RETURN varhasil;
 END$$
 DELIMITER ;
+```
+
+6. jalankan query dibawah comment -- ready view 
+  
+```sh 
+create view get_verifikasi_wa as SELECT a.no_reg as antrian, a.tgl_registrasi, a.no_rkm_medis , b.nm_poli , c.hari_kerja as hari_layanan , d.nm_dokter FROM   
+reg_periksa as a 
+inner join poliklinik as b on a.kd_poli = b.kd_poli 
+inner join dokter as d on a.kd_dokter = d.kd_dokter 
+inner join jadwal as c on (a.kd_dokter = c.kd_dokter and a.kd_poli = c.kd_poli and c.hari_kerja = dateToDay(a.tgl_registrasi)) 
+where a.tgl_registrasi >= '2022-12-01'
 ```
    
   7. jalankan query dibawah comment -- view jadwal poli 
