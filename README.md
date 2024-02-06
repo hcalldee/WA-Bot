@@ -75,7 +75,7 @@ reg_periksa as a
 inner join poliklinik as b on a.kd_poli = b.kd_poli 
 inner join dokter as d on a.kd_dokter = d.kd_dokter 
 inner join jadwal as c on (a.kd_dokter = c.kd_dokter and a.kd_poli = c.kd_poli and c.hari_kerja = dateToDay(a.tgl_registrasi)) 
-where a.tgl_registrasi >= '2022-12-01'
+where a.tgl_registrasi >= CURDATE()
 ```
    
   7. jalankan query dibawah comment -- view jadwal poli 
